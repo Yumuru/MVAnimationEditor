@@ -38,9 +38,9 @@ public class AnimationGraphAsset : ScriptableObject {
   }
   public void LoadAsset(AnimationGraphView graphView) {
     foreach (var serializable in animationGenerateNodes) {
-      graphView.AddElement(new AnimationGenerateNode(serializable)); }
+      graphView.AddElement(new AnimationGenerateNode(serializable, graphView)); }
     foreach (var serializable in timeNodes) {
-      graphView.AddElement(new TimeNode(serializable)); }
+      graphView.AddElement(new TimeNode(serializable, graphView)); }
     var nodes = graphView.nodes.ToList().Cast<IAnimationGraphNode>().ToList();
     foreach (var fromNode in nodes) {
       var edges = this.edges.Where(e => e.fromNodeGuid == fromNode.guid);

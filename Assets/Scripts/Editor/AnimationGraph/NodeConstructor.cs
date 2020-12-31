@@ -6,13 +6,10 @@ using UnityEditor.Experimental.GraphView;
 namespace AnimationGraph {
 public interface IAnimationGraphNode {
   string guid { get; set; }
-  void InitializeNew();
+  void InitializeNew(AnimationGraphView graphView);
 }
 public interface IProcessNode : IAnimationGraphNode {
   ProcessPort processPort { get; set; }
-}
-public class ProcessData {
-  AnimationClip clip;
 }
 public class ProcessPort {
   public Port InputPort;

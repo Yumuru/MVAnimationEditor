@@ -32,14 +32,16 @@ public class AnimationGenerateNode : Node, IProcessNode {
     this.extensionContainer.Add(animationClipField);
   }
 
-  public void InitializeNew() {
+  public void InitializeNew(AnimationGraphView graphView) {
     this.guid = Guid.NewGuid().ToString();
+    this.graphView = graphView;
     this.Initialize();
   }
   
   public AnimationGenerateNode() {}
-  public AnimationGenerateNode(SerializableAnimationGenerateNode serializable) {
+  public AnimationGenerateNode(SerializableAnimationGenerateNode serializable, AnimationGraphView graphView) {
     serializable.graphNode.Load(this);
+    this.graphView = graphView;
     this.Initialize();
     animationClipField.value = serializable.clip;
   }

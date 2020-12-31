@@ -31,10 +31,9 @@ public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
     var type = searchTreeEntry.userData as System.Type;
     var node = Activator.CreateInstance(type) as Node;
     if (node is IAnimationGraphNode graphNode) {
-      graphNode.InitializeNew();
+      graphNode.InitializeNew(graphView);
     }
     graphView.AddElement(node);
-    EditorUtility.SetDirty(graphView.graphAsset);
     return true;
   }
 }
