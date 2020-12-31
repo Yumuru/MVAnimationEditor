@@ -3,12 +3,14 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 [CreateAssetMenu(menuName = "AnimationGraph")]
 public class AnimationGraphAsset : ScriptableObject {
   public List<SerializableAnimationGenerateNode> animationGenerateNodes = new List<SerializableAnimationGenerateNode>();
   public List<SerializableTimeNode> timeNodes = new List<SerializableTimeNode>();
+  public List<SerializableEdge> edges = new List<SerializableEdge>();
   public static AnimationGraphAsset SaveAsset(AnimationGraphView graphView) {
     var asset = new AnimationGraphAsset();
 
@@ -23,14 +25,32 @@ public class AnimationGraphAsset : ScriptableObject {
       }
     });
 
+    graphView.edges.ForEach(edge => {
+      var outputNode = edge.output.node as IAnimationGraphNode;
+      var inputNode = edge.input.node as IAnimationGraphNode;
+      asset.edges.Add(new SerializableEdge() {
+        fromNodeGuid = outputNode.guid,
+        toNodeGuid = inputNode.guid
+      });
+    });
+
     return asset;
   }
   public void LoadAsset(AnimationGraphView graphView) {
     foreach (var serializable in animationGenerateNodes) {
-      graphView.AddElement(new AnimationGenerateNode(serializable));
-    }
+      graphView.AddElement(new AnimationGenerateNode(serializable)); }
     foreach (var serializable in timeNodes) {
-      graphView.AddElement(new TimeNode(serializable));
+      graphView.AddElement(new TimeNode(serializable)); }
+    var nodes = graphView.nodes.ToList().Cast<IAnimationGraphNode>().ToList();
+    foreach (var fromNode in nodes) {
+      var edges = this.edges.Where(e => e.fromNodeGuid == fromNode.guid);
+      foreach (var e in edges) {
+        var toNode = nodes.First(n => n.guid == e.toNodeGuid);
+        var outputPort = ((Node)fromNode).outputContainer.Q<Port>();
+        var inputPort = ((Node)toNode).inputContainer.Q<Port>();
+        var edge = outputPort.ConnectTo(inputPort);
+        graphView.Add(edge);
+      }
     }
   }
 }
@@ -48,5 +68,10 @@ public class SerializableAnimationGraphNode {
     node.guid = guid;
     ((VisualElement)node).transform.position = position;
   }
+}
+[Serializable]
+public class SerializableEdge {
+  public string fromNodeGuid;
+  public string toNodeGuid;
 }
 }
