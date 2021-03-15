@@ -6,9 +6,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
-  private AnimationGraphView graphView;
+  private GraphView graphView;
 
-  public void Initialize(AnimationGraphView graphView) {
+  public SearchWindowProvider(GraphView graphView) {
     this.graphView = graphView;
   }
 
@@ -18,7 +18,10 @@ public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
 
     foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
       foreach (var type in assembly.GetTypes()) {
-        if (type.IsClass && type.Namespace == "AnimationGraph" && !type.IsAbstract && (type.IsSubclassOf(typeof(Node)))) {
+        var checkSubclass =
+          type.IsSubclassOf(typeof(Node)) ||
+          type.IsSubclassOf(typeof(GraphElement));
+        if (type.IsClass && type.Namespace == "AnimationGraph" && !type.IsAbstract && checkSubclass) {
           entries.Add(new SearchTreeEntry(new GUIContent(type.Name)) { level = 1, userData = type });
         }
       }
@@ -29,11 +32,11 @@ public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
 
   bool ISearchWindowProvider.OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context) {
     var type = searchTreeEntry.userData as System.Type;
-    var node = Activator.CreateInstance(type) as Node;
-    if (node is IAnimationGraphNode graphNode) {
-      graphNode.InitializeNew(graphView);
+    var element = Activator.CreateInstance(type) as GraphElement;
+    if (element is IGraphNode node) {
+      node.graphNode.Initialize(graphView);
     }
-    graphView.AddElement(node);
+    graphView.AddElement(element);
     return true;
   }
 }
