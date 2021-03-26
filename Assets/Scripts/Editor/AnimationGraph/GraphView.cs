@@ -8,9 +8,11 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 public class GraphView : UnityEditor.Experimental.GraphView.GraphView {
+  public AnimationGraphWindow window { get; set; }
   public GraphAsset graphAsset { get; set; }
 
-  public GraphView(GraphAsset asset) : base() {
+  public GraphView(AnimationGraphWindow window, GraphAsset asset) : base() {
+    this.window = window;
     this.graphAsset = asset;
     SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
     style.flexGrow = 1;
@@ -21,7 +23,7 @@ public class GraphView : UnityEditor.Experimental.GraphView.GraphView {
     this.AddManipulator(new SelectionDragger());
     this.AddManipulator(new RectangleSelector());
 
-    var searchWindowProvider = new SearchWindowProvider(this);
+    var searchWindowProvider = new SearchWindowProvider(window, this);
 
     this.RegisterCallback((KeyDownEvent evt) => {
       if (evt.ctrlKey && evt.keyCode == UnityEngine.KeyCode.S) {

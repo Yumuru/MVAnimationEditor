@@ -26,10 +26,15 @@ MonoBehaviour:
   - graphNode:
       position:
         serializedVersion: 2
-        x: -46
-        y: 228
-        width: 320
-        height: 97
+        x: -59
+        y: 272
+        width: 277
+        height: 135
+    gameObject:
+      assetPath: Assets/_Sandbox/0302/New Scene.unity
+      hierarchyPath: Cube
+    typeName: Transform
+    propertyName: m_LocalPosition.x
     outputNodeGuid: 4e87e17f-9a49-4df8-8ca3-d1407337a9d9
   propertyTransitionNodes:
   - graphNode:
@@ -71,8 +76,8 @@ MonoBehaviour:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 414
-        y: 269
+        x: 406
+        y: 304
         width: 253
         height: 125
     propretyPortGuid: eb1f4232-1cd0-4ddd-8108-7626fb8a90eb
@@ -110,7 +115,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1092
         y: 194
-        width: 259
+        width: 260
         height: 195
     inputPortGuid: 510f4264-55f3-4657-8247-24260402edec
     fields:
@@ -169,7 +174,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1015
         y: 64
-        width: 139
+        width: 143
         height: 77
     inputPortGuid: b0e823cf-4d94-4688-86a8-213d3d9eae9d
   - graphNode:
@@ -186,8 +191,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: -188
         y: 81
-        width: 178
-        height: 117
+        width: 179
+        height: 115
     name: 
     value: 9
     inputPortGuid: ba66c8e4-7206-4b65-b431-11752436efe6
@@ -236,6 +241,7 @@ MonoBehaviour:
       fields:
       - inputPortGuid: a29dbff5-0754-4adf-a10a-a3adda9bb8c1
         value: 0
+  cosNodes: []
   edges:
   - outputPortGuid: a5ca7094-ea49-42f6-91a9-7badb27a62d3
     inputPortGuid: ab1a4b2f-3151-4695-8c3b-a669657878a1

@@ -39,7 +39,7 @@ public class AnimationGraphWindow : EditorWindow {
   }
 
   public void Initialize() {
-    var graphView = new GraphView(this.graphAsset);
+    var graphView = new GraphView(this, this.graphAsset);
     rootVisualElement.Add(graphView);
   }
 }

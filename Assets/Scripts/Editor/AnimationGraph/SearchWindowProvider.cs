@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
+  private AnimationGraphWindow window;
   private GraphView graphView;
 
-  public SearchWindowProvider(GraphView graphView) {
+  public SearchWindowProvider(AnimationGraphWindow window, GraphView graphView) {
+    this.window = window;
     this.graphView = graphView;
   }
 
@@ -36,6 +39,9 @@ public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
     if (element is IGraphNode node) {
       node.graphNode.Initialize(graphView);
     }
+    var worldMousePosition = window.rootVisualElement.ChangeCoordinatesTo(window.rootVisualElement.parent, context.screenMousePosition - window.position.position);
+    var localMousePosition = graphView.contentViewContainer.WorldToLocal(worldMousePosition);
+    element.SetPosition(new Rect(localMousePosition, default));
     graphView.AddElement(element);
     return true;
   }

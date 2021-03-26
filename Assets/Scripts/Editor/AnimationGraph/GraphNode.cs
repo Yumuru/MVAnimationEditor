@@ -19,13 +19,6 @@ public class SerializableGraphNode {
 public interface IGraphNode {
   IGraphNodeLogic graphNode { get; }
 }
-public struct ProcessParameter {
-  public float time;
-  public AnimationClip clip;
-}
-public interface IProcessNode : IGraphNode {
-  Action<ProcessParameter> Proceed { get; }
-}
 public interface ICalculateNode : IGraphNode {
   Dictionary<Port, Func<object>> Calculate { get; }
 }
