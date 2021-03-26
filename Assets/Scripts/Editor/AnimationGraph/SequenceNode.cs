@@ -7,6 +7,7 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
+using static CalculateNode;
 [Serializable]
 public class SerializableSequenceNode {
   public enum FieldType {
@@ -135,19 +136,25 @@ public class SequenceNode : Node, IProcessNode {
       foreach (var field in fields) {
         if (field is TimeField timeField) {
           if (timeField.timePort.connected) {
-            var port = timeField.timePort.connections.First().output;
-            var node = port.node as ICalculateNode;
-            process.time += (float) node.Calculate[port]();
+            process.time += GetCulculatedValue<float>(timeField.timePort);
           } else {
             process.time += timeField.time.value;
           }
+          process.constructor.TSet(process.time);
           foreach (var edge in timeField.outputPort.connections) {
             var node = edge.input.node as IProcessNode;
             node.Proceed?.Invoke(process);
           }
         }
-        if (field is PropertyTransitionInput propertyCurveInput) {
-
+        if (field is PropertyTransitionInput propertyTransitionInput) {
+          if (propertyTransitionInput.propertyCurvePort.connected) {
+            var propertyTransition = GetCulculatedValue<PropertyTransition>(propertyTransitionInput.propertyCurvePort);
+            var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(
+              propertyTransition.property.gameObject.transform,
+              propertyTransition.property.type,
+              propertyTransition.property.propertyName);
+            process.constructor.Add(property, propertyTransition.targetValue, propertyTransition.curve);
+          }
         }
       }
     }

@@ -17,22 +17,25 @@ MonoBehaviour:
       position:
         serializedVersion: 2
         x: -17
-        y: -113
-        width: 287
-        height: 120
+        y: -129
+        width: 282
+        height: 140
     outputPortGuid: a5ca7094-ea49-42f6-91a9-7badb27a62d3
     clip: {fileID: 7400000, guid: f6e189f487729dc41a4a9b78e7e6d520, type: 2}
+    rootGameObject:
+      assetPath: Assets/_Sandbox/0302/New Scene.unity
+      hierarchyPath: Root
   propertyNodes:
   - graphNode:
       position:
         serializedVersion: 2
         x: -59
         y: 272
-        width: 277
-        height: 135
+        width: 271
+        height: 137
     gameObject:
       assetPath: Assets/_Sandbox/0302/New Scene.unity
-      hierarchyPath: Cube
+      hierarchyPath: Root/Cube
     typeName: Transform
     propertyName: m_LocalPosition.x
     outputNodeGuid: 4e87e17f-9a49-4df8-8ca3-d1407337a9d9
@@ -42,13 +45,13 @@ MonoBehaviour:
         serializedVersion: 2
         x: 400
         y: 141
-        width: 253
+        width: 227
         height: 125
     propretyPortGuid: fd99468d-f77e-4fb4-b13d-f2843229e5a5
     targetValuePortGuid: 17aeec58-da9c-4610-a0e2-6d8f14aa1b1f
     curvePortGuid: 0caf7855-aa24-4cc5-9123-75461eb22969
     outputPortGuid: 695a7275-5c59-42b5-a5a6-fa96d2b6dee0
-    targetValue: 0
+    targetValue: 2.56
     curve:
       serializedVersion: 2
       m_Curve:
@@ -76,15 +79,15 @@ MonoBehaviour:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 406
-        y: 304
-        width: 253
+        x: 426
+        y: 362
+        width: 244
         height: 125
     propretyPortGuid: eb1f4232-1cd0-4ddd-8108-7626fb8a90eb
     targetValuePortGuid: de42d29a-39e6-4df6-b92a-e61f0a974d9a
     curvePortGuid: 84caec87-9726-4b71-84fd-1c0371d41b56
     outputPortGuid: fac0f84a-dc1c-4d6a-b9c2-5239b53fb475
-    targetValue: 0
+    targetValue: 3.66
     curve:
       serializedVersion: 2
       m_Curve:
@@ -113,33 +116,9 @@ MonoBehaviour:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 1092
-        y: 194
-        width: 260
-        height: 195
-    inputPortGuid: 510f4264-55f3-4657-8247-24260402edec
-    fields:
-    - type: 0
-      time: 2.55
-      timePortGuid: 2a572f17-f28b-4add-8f11-e471b60261df
-      outputPortGuid: b5c3a070-b318-4943-a91e-52c9c7493631
-      propertyCurvePortGuid: 
-    - type: 1
-      time: 0
-      timePortGuid: 
-      outputPortGuid: 
-      propertyCurvePortGuid: ba8b3571-9b20-4338-8a85-31561ccfd4b4
-    - type: 0
-      time: 3.83
-      timePortGuid: b2d51c90-60f7-4bcc-b138-b840b167f10d
-      outputPortGuid: 4b58d8fa-f7a0-4d7b-bc09-0170c4c1f55d
-      propertyCurvePortGuid: 
-  - graphNode:
-      position:
-        serializedVersion: 2
         x: 756
         y: 57
-        width: 259
+        width: 255
         height: 243
     inputPortGuid: ab1a4b2f-3151-4695-8c3b-a669657878a1
     fields:
@@ -168,6 +147,30 @@ MonoBehaviour:
       timePortGuid: 913ccf36-7f66-43d8-97e1-0e38ef11bbe8
       outputPortGuid: 11eb707f-c574-4b5b-ace6-67bd0819e158
       propertyCurvePortGuid: 
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: 1146
+        y: 206
+        width: 255
+        height: 195
+    inputPortGuid: 510f4264-55f3-4657-8247-24260402edec
+    fields:
+    - type: 0
+      time: 2.55
+      timePortGuid: 2a572f17-f28b-4add-8f11-e471b60261df
+      outputPortGuid: b5c3a070-b318-4943-a91e-52c9c7493631
+      propertyCurvePortGuid: 
+    - type: 1
+      time: 0
+      timePortGuid: 
+      outputPortGuid: 
+      propertyCurvePortGuid: ba8b3571-9b20-4338-8a85-31561ccfd4b4
+    - type: 0
+      time: 3.83
+      timePortGuid: b2d51c90-60f7-4bcc-b138-b840b167f10d
+      outputPortGuid: 4b58d8fa-f7a0-4d7b-bc09-0170c4c1f55d
+      propertyCurvePortGuid: 
   testNodes:
   - graphNode:
       position:
@@ -182,7 +185,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1451
         y: 232
-        width: 139
+        width: 143
         height: 77
     inputPortGuid: 5c8703e4-7923-497c-8135-f157ea2d9ef6
   constuntNodes:
@@ -191,35 +194,21 @@ MonoBehaviour:
         serializedVersion: 2
         x: -188
         y: 81
-        width: 179
-        height: 115
+        width: 178
+        height: 117
     name: 
     value: 9
     inputPortGuid: ba66c8e4-7206-4b65-b431-11752436efe6
     outputPortGuid: 61d4ddd3-611e-4192-a731-3c893aac9615
   curveNodes: []
-  addNodes:
-  - graphNode:
-      position:
-        serializedVersion: 2
-        x: 472
-        y: 6
-        width: 190
-        height: 101
-    outputPortGuid: 9a5d8237-b964-4d18-801c-695dd2de37d5
-    calculateField:
-      fields:
-      - inputPortGuid: 2741ddf7-6955-4e2a-9bcc-3c7bc1443b6b
-        value: 0
-      - inputPortGuid: 21321850-c4fb-45a9-92db-459057c9a2d2
-        value: 17.9
+  addNodes: []
   multiplyNodes:
   - graphNode:
       position:
         serializedVersion: 2
         x: 70
         y: 70
-        width: 190
+        width: 183
         height: 101
     outputPortGuid: a7cd3ca0-e4fd-4b02-883d-a65c7c1b6708
     calculateField:
@@ -234,7 +223,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 277
         y: 9
-        width: 170
+        width: 163
         height: 77
     outputPortGuid: 12d4fa0f-584f-4101-b9c0-9942695c23d5
     calculateField:
@@ -267,9 +256,5 @@ MonoBehaviour:
     inputPortGuid: ba8b3571-9b20-4338-8a85-31561ccfd4b4
   - outputPortGuid: b5c3a070-b318-4943-a91e-52c9c7493631
     inputPortGuid: 5c8703e4-7923-497c-8135-f157ea2d9ef6
-  - outputPortGuid: 12d4fa0f-584f-4101-b9c0-9942695c23d5
-    inputPortGuid: 2741ddf7-6955-4e2a-9bcc-3c7bc1443b6b
-  - outputPortGuid: 9a5d8237-b964-4d18-801c-695dd2de37d5
-    inputPortGuid: 4252a65f-f4af-4d0b-a5db-62bfdde5e919
   - outputPortGuid: 9de929f6-95de-4cc5-89ce-918d039291b0
     inputPortGuid: 510f4264-55f3-4657-8247-24260402edec

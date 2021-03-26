@@ -22,6 +22,13 @@ public interface IGraphNode {
 public interface ICalculateNode : IGraphNode {
   Dictionary<Port, Func<object>> Calculate { get; }
 }
+public static class CalculateNode {
+  public static T GetCulculatedValue<T>(Port caluculatePort) {
+    var port = caluculatePort.connections.First().output;
+    var node = port.node as ICalculateNode;
+    return (T) node.Calculate[port]();
+  }
+}
 public interface IGraphNodeLogic {
   Node node { get; }
   Dictionary<Port, string> portGuids { get; }

@@ -7,6 +7,36 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
+using static UnityUtil;
+[Serializable]
+public class SerializableGameObject {
+  public string assetPath;
+  public string hierarchyPath;
+  public SerializableGameObject(SerializableGameObject serializable) {
+    this.assetPath = serializable.assetPath;
+    this.hierarchyPath = serializable.hierarchyPath;
+  }
+  public SerializableGameObject(GameObject gameObject) {
+    this.assetPath = AssetDatabase.GetAssetOrScenePath(gameObject);
+    this.hierarchyPath = GetHeirarchyPath(gameObject.transform);
+  }
+  public GameObject Find() {
+    if (assetPath == null || hierarchyPath == null) return null;
+    var gameObjects = Resources.FindObjectsOfTypeAll<GameObject>()
+      .Where(go => AssetDatabase.GetAssetOrScenePath(go) == assetPath);
+    var names = hierarchyPath.Split('/').Reverse();
+    foreach (var go in gameObjects) {
+      var transform = go.transform;
+      foreach (var name in names) {
+        if (name != transform.gameObject.name) break;
+        if (transform.parent == null) return go;
+        transform = transform.parent;
+      }
+    }
+    return null;
+  }
+}
+
 [CreateAssetMenu(menuName = "AnimationGraph")]
 public class GraphAsset : ScriptableObject {
   public List<SerializableAnimationGenerateNode> animationGenerateNodes = new List<SerializableAnimationGenerateNode>();

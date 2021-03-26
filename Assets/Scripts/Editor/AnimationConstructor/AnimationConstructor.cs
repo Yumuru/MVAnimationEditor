@@ -166,10 +166,9 @@ public class AnimationConstructor {
     public void TSet(float setTime) {
       var time = times.Peek();
       time.TSet(setTime);
-      foreach (var l in values.Values) {
-        var v = l[l.Count-1];
-        if (v is CurveChangeValue cv) { cv.time = time.currentTime; }
-      }
+      var actions = assignActions.Peek();
+      foreach (var a in actions) { a(time.currentTime); }
+      actions.Clear();
     }
 
     public bool isValueExist(FloatPropertyInfo p) { return values.ContainsKey(p) && values[p].Count > 0; }
@@ -329,10 +328,10 @@ public class AnimationConstructor {
   public static string GetHeirarchyPath(Transform transform) {
     builder.Clear();
     builder.Insert(0, transform.gameObject.name);
-    Transform parent = transform.parent;
-    while (parent != null) {
-      builder.Insert(0, parent.name + "/");
-      parent = parent.parent;
+    transform = transform.parent;
+    while (transform != null) {
+      builder.Insert(0, transform.name + "/");
+      transform = transform.parent;
     }
     return builder.ToString();
   }
