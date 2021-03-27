@@ -17,6 +17,7 @@ public class SerializableGameObject {
     this.hierarchyPath = serializable.hierarchyPath;
   }
   public SerializableGameObject(GameObject gameObject) {
+    if (gameObject == null) return;
     this.assetPath = AssetDatabase.GetAssetOrScenePath(gameObject);
     this.hierarchyPath = GetHeirarchyPath(gameObject.transform);
   }
@@ -39,12 +40,17 @@ public class SerializableGameObject {
 
 [CreateAssetMenu(menuName = "AnimationGraph")]
 public class GraphAsset : ScriptableObject {
+  public Vector3 viewPosition;
+  public Vector3 viewScale;
   public List<SerializableAnimationGenerateNode> animationGenerateNodes = new List<SerializableAnimationGenerateNode>();
+  public List<SerializableGameObjectFieldNode> gameObjectFieldNodes = new List<SerializableGameObjectFieldNode>();
   public List<SerializablePropertyNode> propertyNodes = new List<SerializablePropertyNode>();
   public List<SerializablePropertyTransitionNode> propertyTransitionNodes = new List<SerializablePropertyTransitionNode>();
   public List<SerializableSequenceNode> sequenceNodes = new List<SerializableSequenceNode>();
   public List<SerializableTestNode> testNodes = new List<SerializableTestNode>();
   public List<SerializableConstuntNode> constuntNodes = new List<SerializableConstuntNode>();
+  public List<SerializableFloatValueNode> floatValueNodes = new List<SerializableFloatValueNode>();
+  public List<SerializableFloatListNode> floatListNodes = new List<SerializableFloatListNode>();
   public List<SerializableCurveNode> curveNodes = new List<SerializableCurveNode>();
   public List<SerializableAddNode> addNodes = new List<SerializableAddNode>();
   public List<SerializableMultiplyNode> multiplyNodes = new List<SerializableMultiplyNode>();
@@ -52,12 +58,18 @@ public class GraphAsset : ScriptableObject {
   public List<SerializableCosNode> cosNodes = new List<SerializableCosNode>();
   public List<SerializableEdge> edges = new List<SerializableEdge>();
   public void SaveAsset(GraphView graphView) {
+    viewPosition = graphView.viewTransform.position;
+    viewScale = graphView.viewTransform.scale;
+
     animationGenerateNodes.Clear();
+    gameObjectFieldNodes.Clear();
     propertyNodes.Clear();
     propertyTransitionNodes.Clear();
     sequenceNodes.Clear();
     testNodes.Clear();
     constuntNodes.Clear();
+    floatValueNodes.Clear();
+    floatListNodes.Clear();
     curveNodes.Clear();
     addNodes.Clear();
     multiplyNodes.Clear();
@@ -87,8 +99,13 @@ public class GraphAsset : ScriptableObject {
     AssetDatabase.SaveAssets();
   }
   public void LoadAsset(GraphView graphView) {
+    graphView.viewTransform.position = viewPosition;
+    graphView.viewTransform.scale = viewScale;
+
     foreach (var serializable in animationGenerateNodes) {
       graphView.AddElement(new AnimationGenerateNode(graphView, serializable)); }
+    foreach (var serializable in gameObjectFieldNodes) {
+      graphView.AddElement(new GameObjectFieldNode(graphView, serializable)); }
     foreach (var serializable in propertyNodes) {
       graphView.AddElement(new PropertyNode(graphView, serializable)); }
     foreach (var serializable in propertyTransitionNodes) {
@@ -99,6 +116,10 @@ public class GraphAsset : ScriptableObject {
       graphView.AddElement(new TestNode(graphView, serializable)); }
     foreach (var serializable in constuntNodes) {
       graphView.AddElement(new ConstuntNode(graphView, serializable)); }
+    foreach (var serializable in floatValueNodes) {
+      graphView.AddElement(new FloatValueNode(graphView, serializable)); }
+    foreach (var serializable in floatListNodes) {
+      graphView.AddElement(new FloatListNode(graphView, serializable)); }
     foreach (var serializable in curveNodes) {
       graphView.AddElement(new CurveNode(graphView, serializable)); }
     foreach (var serializable in addNodes) {

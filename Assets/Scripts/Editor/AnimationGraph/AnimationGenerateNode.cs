@@ -21,7 +21,8 @@ public class SerializableAnimationGenerateNode {
     this.graphNode = new SerializableGraphNode(node.graphNode);
     this.outputPortGuid = node.outputPortGuid;
     this.clip = (AnimationClip) node.animationClipField.value;
-    this.rootGameObject = new SerializableGameObject(node.rootField.value as GameObject);
+    if (node.rootField.value is GameObject go) {
+      this.rootGameObject = new SerializableGameObject(go); }
   }
 }
 public class AnimationGenerateNode : Node, IProcessNode {
@@ -53,7 +54,7 @@ public class AnimationGenerateNode : Node, IProcessNode {
     this.rootField = new ObjectField();
     this.rootField.objectType = typeof(GameObject);
     this.rootField.label = "Root Object";
-    this.rootField.value = serializable.rootGameObject.Find();
+    this.rootField.value = serializable.rootGameObject?.Find();
 
     this.mainContainer.Add(animationClipField);
     this.mainContainer.Add(rootField);

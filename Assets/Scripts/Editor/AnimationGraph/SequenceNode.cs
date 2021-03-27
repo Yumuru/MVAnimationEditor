@@ -8,6 +8,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 using static CalculateNode;
+public interface ISequenceAction {
+  Func<ProcessParameter, ProcessParameter> Proceed { get; }
+}
 [Serializable]
 public class SerializableSequenceNode {
   public enum FieldType {

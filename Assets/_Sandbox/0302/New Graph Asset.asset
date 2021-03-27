@@ -12,103 +12,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe5e6e1d8cb540498e9ed516f853cf8, type: 3}
   m_Name: New Graph Asset
   m_EditorClassIdentifier: 
+  viewPosition: {x: 260, y: -167, z: 0}
+  viewScale: {x: 1, y: 1, z: 1}
   animationGenerateNodes:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 383
-        y: -88
-        width: 282
+        x: 375
+        y: 72
+        width: 327
         height: 140
-    outputPortGuid: a5ca7094-ea49-42f6-91a9-7badb27a62d3
-    clip: {fileID: 7400000, guid: f6e189f487729dc41a4a9b78e7e6d520, type: 2}
+    outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
+    clip: {fileID: 0}
     rootGameObject:
+      assetPath: 
+      hierarchyPath: 
+  gameObjectFieldNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: -217
+        y: 326
+        width: 230
+        height: 97
+    gameObject:
       assetPath: Assets/_Sandbox/0302/New Scene.unity
-      hierarchyPath: Root
+      hierarchyPath: Root/Cube
+    outputNodeGuid: 9cf0400d-b56c-4384-8147-19b0b9a6a317
   propertyNodes:
   - graphNode:
       position:
         serializedVersion: 2
-        x: -59
-        y: 272
-        width: 271
-        height: 137
-    gameObject:
-      assetPath: Assets/_Sandbox/0302/New Scene.unity
-      hierarchyPath: Root/Cube
+        x: 281
+        y: 301
+        width: 279
+        height: 115
+    gameObjectPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239
     typeName: Transform
     propertyName: m_LocalPosition.x
-    outputNodeGuid: 4e87e17f-9a49-4df8-8ca3-d1407337a9d9
+    outputNodeGuid: 16a8d4ed-ceb4-4c28-b03c-2f239561a5cb
   propertyTransitionNodes:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 400
-        y: 141
-        width: 244
+        x: 625
+        y: 316
+        width: 254
         height: 125
-    propretyPortGuid: fd99468d-f77e-4fb4-b13d-f2843229e5a5
-    targetValuePortGuid: 17aeec58-da9c-4610-a0e2-6d8f14aa1b1f
-    curvePortGuid: 0caf7855-aa24-4cc5-9123-75461eb22969
-    outputPortGuid: 695a7275-5c59-42b5-a5a6-fa96d2b6dee0
-    targetValue: 2.56
+    propretyPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
+    targetValuePortGuid: cf054bf7-f7a2-4eed-ad17-4c7d11e3771f
+    curvePortGuid: d3027657-e276-48ba-bbd3-5da13f93abc5
+    outputPortGuid: ccccbb4d-1e4e-46d3-af5a-54a1e94256e5
+    targetValue: 0
     curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 2
-        outSlope: 2
+        inSlope: 1
+        outSlope: 1
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: 1
+        outSlope: 1
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - graphNode:
-      position:
-        serializedVersion: 2
-        x: 426
-        y: 362
-        width: 244
-        height: 125
-    propretyPortGuid: eb1f4232-1cd0-4ddd-8108-7626fb8a90eb
-    targetValuePortGuid: de42d29a-39e6-4df6-b92a-e61f0a974d9a
-    curvePortGuid: 84caec87-9726-4b71-84fd-1c0371d41b56
-    outputPortGuid: fac0f84a-dc1c-4d6a-b9c2-5239b53fb475
-    targetValue: 3.66
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -116,52 +92,84 @@ MonoBehaviour:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 825
-        y: 71
-        width: 255
-        height: 243
-    inputPortGuid: 526d4788-d222-45be-b811-65485d72af5d
+        x: 1013
+        y: 227
+        width: 235
+        height: 147
+    inputPortGuid: 7745f751-d828-49ac-9690-e319cb5bc45c
     fields:
     - type: 0
       time: 0
-      timePortGuid: 3071700a-5833-4446-af30-586b8f23fb1d
-      outputPortGuid: 0c353882-f9f7-4ea1-967f-e34cab87a48d
-      propertyCurvePortGuid: 
-    - type: 1
-      time: 0
-      timePortGuid: 
-      outputPortGuid: 
-      propertyCurvePortGuid: 1cb06f58-44a5-44b1-9489-9f031320df25
-    - type: 0
-      time: 0.29
-      timePortGuid: ca2351e9-e5f1-4d97-bbe0-9c0c39390690
-      outputPortGuid: 36aa51b9-a521-40d2-ab3b-c0bd1adfee9b
-      propertyCurvePortGuid: 
-    - type: 1
-      time: 0
-      timePortGuid: 
-      outputPortGuid: 
-      propertyCurvePortGuid: 81f62e6a-6301-4a3b-9cec-a9fa0a62d40c
-    - type: 0
-      time: 0.25
-      timePortGuid: 49333dc9-df36-47d3-9d1c-1ac36e85521d
-      outputPortGuid: 616e68dc-b73c-4ead-b94d-ee8d7eb6d35a
+      timePortGuid: 72785db7-6fe1-46f5-be62-43a19cb09e99
+      outputPortGuid: abbf4191-0c5e-425b-ad5f-78141db63941
       propertyCurvePortGuid: 
   testNodes: []
   constuntNodes: []
+  floatValueNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: -229
+        y: 697
+        width: 195
+        height: 64
+    value: 2.52
+    outputPortGuid: 5836cbf2-e8e9-407f-8509-e06054b8c6e3
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: -175
+        y: 469
+        width: 195
+        height: 64
+    value: 1.78
+    outputPortGuid: 82128dd1-5549-4010-a87f-97737052eebe
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: -135
+        y: 595
+        width: 200
+        height: 64
+    value: -1.73
+    outputPortGuid: dbd133ab-e8d7-4cef-8fec-0074d439f846
+  floatListNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: 230
+        y: 489
+        width: 197
+        height: 220
+    inputPortGuids:
+    - df02de50-3262-4c72-8426-8447c1e461a7
+    - 8166856b-e47c-48fb-8eb7-4f76d9263023
+    - 305662d6-f9ef-4ff7-b6eb-19bbcf58c887
+    - 8a57a040-f5a2-4df1-a304-b4c4b6741839
+    - 983959a7-ecfd-488b-9a57-2ab5e9432721
+    - 9cf6eb3c-053c-4fe1-aef0-e40614d19681
+    outputPortGuid: 52f06efd-1ea6-4ac3-89fa-55827b12e3cd
   curveNodes: []
   addNodes: []
   multiplyNodes: []
   sinNodes: []
   cosNodes: []
   edges:
-  - outputPortGuid: 4e87e17f-9a49-4df8-8ca3-d1407337a9d9
-    inputPortGuid: fd99468d-f77e-4fb4-b13d-f2843229e5a5
-  - outputPortGuid: 4e87e17f-9a49-4df8-8ca3-d1407337a9d9
-    inputPortGuid: eb1f4232-1cd0-4ddd-8108-7626fb8a90eb
-  - outputPortGuid: 695a7275-5c59-42b5-a5a6-fa96d2b6dee0
-    inputPortGuid: 1cb06f58-44a5-44b1-9489-9f031320df25
-  - outputPortGuid: fac0f84a-dc1c-4d6a-b9c2-5239b53fb475
-    inputPortGuid: 81f62e6a-6301-4a3b-9cec-a9fa0a62d40c
-  - outputPortGuid: a5ca7094-ea49-42f6-91a9-7badb27a62d3
-    inputPortGuid: 526d4788-d222-45be-b811-65485d72af5d
+  - outputPortGuid: 9cf0400d-b56c-4384-8147-19b0b9a6a317
+    inputPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239
+  - outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
+    inputPortGuid: 7745f751-d828-49ac-9690-e319cb5bc45c
+  - outputPortGuid: 16a8d4ed-ceb4-4c28-b03c-2f239561a5cb
+    inputPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
+  - outputPortGuid: 82128dd1-5549-4010-a87f-97737052eebe
+    inputPortGuid: df02de50-3262-4c72-8426-8447c1e461a7
+  - outputPortGuid: 82128dd1-5549-4010-a87f-97737052eebe
+    inputPortGuid: 305662d6-f9ef-4ff7-b6eb-19bbcf58c887
+  - outputPortGuid: 82128dd1-5549-4010-a87f-97737052eebe
+    inputPortGuid: 9cf6eb3c-053c-4fe1-aef0-e40614d19681
+  - outputPortGuid: 5836cbf2-e8e9-407f-8509-e06054b8c6e3
+    inputPortGuid: 983959a7-ecfd-488b-9a57-2ab5e9432721
+  - outputPortGuid: 5836cbf2-e8e9-407f-8509-e06054b8c6e3
+    inputPortGuid: 8166856b-e47c-48fb-8eb7-4f76d9263023
+  - outputPortGuid: dbd133ab-e8d7-4cef-8fec-0074d439f846
+    inputPortGuid: 8a57a040-f5a2-4df1-a304-b4c4b6741839

@@ -13,19 +13,19 @@ using static UnityUtil;
 [Serializable]
 public class SerializablePropertyNode {
   public SerializableGraphNode graphNode;
-  public SerializableGameObject gameObject;
+  public string gameObjectPortGuid;
   public string typeName;
   public string propertyName;
   public string outputNodeGuid;
   public SerializablePropertyNode() {
+    gameObjectPortGuid = Guid.NewGuid().ToString();
     outputNodeGuid = Guid.NewGuid().ToString();
   }
   public SerializablePropertyNode(PropertyNode node) {
     this.graphNode = new SerializableGraphNode(node.graphNode);
-    var gameObject = node.gameObjectField.value as GameObject;
-    if (gameObject != null) this.gameObject = new SerializableGameObject(gameObject);
     this.typeName = node.typeNameField.value;
     this.propertyName = node.propertyNameField.value;
+    this.gameObjectPortGuid = node.gameObjectPortGuid;
     this.outputNodeGuid = node.outputPortGuid;
   }
 }
@@ -39,10 +39,10 @@ public struct PropertyData {
 
 public class PropertyNode : Node, ICalculateNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public ObjectField gameObjectField { get; private set; }
   public TextField typeNameField { get; private set; }
   public TextField propertyNameField { get; private set; }
   public Dictionary<Port, Func<object>> Calculate { get; } = new Dictionary<Port, Func<object>>();
+  public string gameObjectPortGuid;
   public string outputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
@@ -61,10 +61,10 @@ public class PropertyNode : Node, ICalculateNode {
   void Construct(SerializablePropertyNode serializable) {
     this.title = "Property";
 
-    this.gameObjectField = new ObjectField();
-    this.gameObjectField.objectType = typeof(GameObject);
-    this.gameObjectField.label = "Game Object";
-    this.gameObjectField.value = serializable.gameObject.Find();
+    this.gameObjectPortGuid = serializable.gameObjectPortGuid;
+    var gameObjectPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(GameObject));
+    this.graphNode.RegisterPort(gameObjectPort, gameObjectPortGuid);
+    this.inputContainer.Add(gameObjectPort);
 
     this.typeNameField = new TextField();
     this.typeNameField.label = "Type Name";
@@ -80,7 +80,7 @@ public class PropertyNode : Node, ICalculateNode {
     this.outputContainer.Add(outputPort);
 
     this.Calculate[outputPort] = () => {
-      var gameObject = gameObjectField.value as GameObject;
+      var gameObject = CalculateNode.GetCulculatedValue<GameObject>(gameObjectPort);
       return new PropertyData() {
         gameObject = gameObject,
         gameObjectHierarchyPath = GetHeirarchyPath(gameObject.transform),
@@ -89,7 +89,6 @@ public class PropertyNode : Node, ICalculateNode {
       };
     };
 
-    this.mainContainer.Add(gameObjectField);
     this.mainContainer.Add(typeNameField);
     this.mainContainer.Add(propertyNameField);
   }

@@ -68,9 +68,10 @@ public class PropertyTransitionNode : Node, ICalculateNode {
     targetValueElement.style.flexDirection = FlexDirection.Row;
     this.targetValuePortGuid = serializable.targetValuePortGuid;
     var targetValuePort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
+    targetValuePort.portName = "Traget Value";
     this.graphNode.RegisterPort(targetValuePort, targetValuePortGuid);
     targetValueField = new FloatField();
-    targetValueField.label = "Target Value";
+    //targetValueField.label = "Target Value";
     targetValueField.labelElement.style.minWidth = 50;
     targetValueField.value = serializable.targetValue;
     targetValueElement.Add(targetValuePort);
