@@ -80,7 +80,7 @@ public class FloatListNode : Node, ICalculateNode {
     this.Calculate[outputPort] = () => {
       return fields
         .Where(f => f.inputPort.connected)
-        .Select(field => CalculateNode.GetCulculatedValue<float>(field.inputPort))
+        .Select(field => CalculatePort.GetCalculatedValue<float>(field.inputPort))
         .ToList();
     };
   }

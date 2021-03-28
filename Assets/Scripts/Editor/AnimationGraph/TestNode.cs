@@ -17,10 +17,9 @@ public class SerializableTestNode {
     this.inputPortGuid = node.inputPortGuid;
   }
 }
-public class TestNode : Node, IProcessNode {
+public class TestNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public string inputPortGuid;
-  public Action<ProcessParameter> Proceed { get; private set; }
 
   void SaveAsset(GraphAsset asset) {
     asset.testNodes.Add(new SerializableTestNode(this));
@@ -34,7 +33,7 @@ public class TestNode : Node, IProcessNode {
     this.inputContainer.Add(inputPort);
     this.outputContainer.RemoveFromHierarchy();
 
-    this.Proceed = p => {
+    inputPort.OnProceed = p => {
       Debug.Log(p.time);
     };
   }

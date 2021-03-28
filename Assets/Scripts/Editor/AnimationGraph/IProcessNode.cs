@@ -11,15 +11,29 @@ public struct ProcessParameter {
   public AnimationClip clip;
 }
 
-public interface IProcessNode : IGraphNode {
-  Action<ProcessParameter> Proceed { get; }
+public interface IProcessPort {
+  Action<ProcessParameter> OnProceed { get; set; }
 }
-public static class ProcessNode {
+public class ProcessPort : Port, IProcessPort {
+  public Action<ProcessParameter> OnProceed { get; set; }
+  public ProcessPort(Orientation orientation, Direction direction, Capacity capacity, Type type) : base(orientation, direction, capacity, type) { }
+
   public static void Proceed(ProcessParameter parameter, Port port) {
     foreach (var edge in port.connections) {
-      var node = edge.input.node as IProcessNode;
-      node.Proceed?.Invoke(parameter);
+      var processPort = edge.input as IProcessPort;
+      processPort.OnProceed(parameter);
     }
+  }
+  public static ProcessPort CreateInput() { 
+    return new ProcessPort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ProcessPort));
+  }
+  public static ProcessPort CreateInput(Action<ProcessParameter> onProceed) { 
+    var port = CreateInput();
+    port.OnProceed = onProceed;
+    return port;
+  }
+  public static Port CreateOutput() { 
+    return Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(ProcessPort));
   }
 }
 }

@@ -22,11 +22,25 @@ public interface IGraphNode {
 public interface ICalculateNode : IGraphNode {
   Dictionary<Port, Func<object>> Calculate { get; }
 }
-public static class CalculateNode {
-  public static T GetCulculatedValue<T>(Port caluculatePort) {
+public interface ICalculatedOutPort<T> {
+  Func<T> Calculate { get; set; }
+}
+public class BasicCalculatedOutPort<T> : Port, ICalculatedOutPort<T> {
+  public Func<T> Calculate { get; set; }
+  public BasicCalculatedOutPort() : base(Orientation.Horizontal, Direction.Output, Capacity.Multi, typeof(T)) { }
+  public BasicCalculatedOutPort(Func<T> calculate) : this() {
+    this.Calculate = calculate;
+  }
+}
+public static class CalculatePort {
+  public static T GetCalculatedValue<T>(Port caluculatePort) {
     var port = caluculatePort.connections.First().output;
     var node = port.node as ICalculateNode;
     return (T) node.Calculate[port]();
+  }
+  public static T GetCalculatedValue_New<T>(Port calculatePort) {
+    var port = calculatePort.connections.First().output as ICalculatedOutPort<T>;
+    return port.Calculate();
   }
 }
 public interface IGraphNodeLogic {
@@ -77,24 +91,6 @@ public class GraphNodeLogic : IGraphNodeLogic {
       edge.RemoveFromHierarchy(); }
     guidPorts.Remove(portGuids[port]);
     portGuids.Remove(port);
-  }
-}
-public static class ProcessPort {
-  public static Port CreateInput() { 
-    return Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ProcessPort));
-  }
-  public static Port CreateInput(string name) {
-    var port = CreateInput();
-    port.name = name;
-    return port;
-  }
-  public static Port CreateOutput() { 
-    return Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(ProcessPort));
-  }
-  public static Port CreateOutput(string name) {
-    var port = CreateOutput();
-    port.name = name;
-    return port;
   }
 }
 }

@@ -80,7 +80,7 @@ public class PropertyNode : Node, ICalculateNode {
     this.outputContainer.Add(outputPort);
 
     this.Calculate[outputPort] = () => {
-      var gameObject = CalculateNode.GetCulculatedValue<GameObject>(gameObjectPort);
+      var gameObject = CalculatePort.GetCalculatedValue<GameObject>(gameObjectPort);
       return new PropertyData() {
         gameObject = gameObject,
         gameObjectHierarchyPath = GetHeirarchyPath(gameObject.transform),

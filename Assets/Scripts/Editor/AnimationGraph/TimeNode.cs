@@ -24,9 +24,8 @@ public class SerializableTimeNode {
     this.outputPortGuid = node.outputPortGuid;
   }
 }
-public class TimeNode : Node, ICalculateNode {
+public class TimeNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public Dictionary<Port, Func<object>> Calculate { get; } = new Dictionary<Port, Func<object>>();
   public string timePortGuid;
   public FloatField timeField;
   public string outputPortGuid;
@@ -45,12 +44,12 @@ public class TimeNode : Node, ICalculateNode {
     this.timeField.value = serializable.time;
     this.mainContainer.Add(timeField);
 
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(SequenceAction));
+    var outputPort = new SequenceActionPort(true);
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    Calculate[outputPort] = () => {
+    outputPort.Calculate = () => {
       return new SequenceAction(p => {
         p.time += timeField.value;
         p.constructor.TSet(p.time);

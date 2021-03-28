@@ -7,9 +7,16 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
-using static CalculateNode;
-
 public delegate ProcessParameter SequenceAction(ProcessParameter processParameter);
+public class SequenceActionPort : BasicCalculatedOutPort<SequenceAction> {
+  public bool canUseProcessOutput;
+  public SequenceActionPort(bool canUseProcessOutput) : base() {
+    this.canUseProcessOutput = canUseProcessOutput;
+  }
+  public SequenceActionPort(bool canUseProcessOutput, Func<SequenceAction> calculate) : base(calculate) {
+    this.canUseProcessOutput = canUseProcessOutput;
+  }
+}
 
 [Serializable]
 public class SerializableNewSequenceNode {
@@ -42,9 +49,8 @@ public class SerializableNewSequenceNode {
     }
   }
 }
-public class NewSequenceNode : Node, IProcessNode {
+public class NewSequenceNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public Action<ProcessParameter> Proceed { get; private set; }
   public string inputPortGuid;
 
   public class Field : VisualElement {
@@ -80,9 +86,9 @@ public class NewSequenceNode : Node, IProcessNode {
     }
 
     public ProcessParameter Proceed(ProcessParameter p) {
-      var action = CalculateNode.GetCulculatedValue<SequenceAction>(actionPort);
+      var action = CalculatePort.GetCalculatedValue_New<SequenceAction>(actionPort);
       if (action != null) p = action(p);
-      ProcessNode.Proceed(p, outputPort);
+      ProcessPort.Proceed(p, outputPort);
       return p;
     }
   }
@@ -135,7 +141,7 @@ public class NewSequenceNode : Node, IProcessNode {
 
     this.mainContainer.Add(addFieldButton);
 
-    this.Proceed = p => {
+    inputPort.OnProceed = p => {
       fields.Proceed(p);
     };
   }

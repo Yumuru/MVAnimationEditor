@@ -7,7 +7,6 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
-using static CalculateNode;
 [Serializable]
 public class SerializableSequenceNode {
   public enum FieldType {
@@ -53,10 +52,9 @@ public class SerializableSequenceNode {
     }
   }
 }
-public class SequenceNode : Node, IProcessNode {
+public class SequenceNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public string inputPortGuid;
-  public Action<ProcessParameter> Proceed { get; private set; }
   public class SequenceField : VisualElement {
     public interface IField { }
     public class TimeField : VisualElement, IField {
@@ -136,19 +134,16 @@ public class SequenceNode : Node, IProcessNode {
       foreach (var field in fields) {
         if (field is TimeField timeField) {
           if (timeField.timePort.connected) {
-            process.time += GetCulculatedValue<float>(timeField.timePort);
+            process.time += CalculatePort.GetCalculatedValue<float>(timeField.timePort);
           } else {
             process.time += timeField.time.value;
           }
           process.constructor.TSet(process.time);
-          foreach (var edge in timeField.outputPort.connections) {
-            var node = edge.input.node as IProcessNode;
-            node.Proceed?.Invoke(process);
-          }
+          ProcessPort.Proceed(process, timeField.outputPort);
         }
         if (field is PropertyTransitionInput propertyTransitionInput) {
           if (propertyTransitionInput.propertyCurvePort.connected) {
-            var propertyTransition = GetCulculatedValue<PropertyTransition>(propertyTransitionInput.propertyCurvePort);
+            var propertyTransition = CalculatePort.GetCalculatedValue<PropertyTransition>(propertyTransitionInput.propertyCurvePort);
             var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(
               propertyTransition.property.gameObject.transform,
               propertyTransition.property.type,
@@ -191,7 +186,7 @@ public class SequenceNode : Node, IProcessNode {
     this.mainContainer.Add(propertyCurveButton);
     this.mainContainer.Add(timeButton);
 
-    this.Proceed = p => {
+    inputPort.OnProceed = p => {
       sequenceField.Proceed(p);
     };
   }

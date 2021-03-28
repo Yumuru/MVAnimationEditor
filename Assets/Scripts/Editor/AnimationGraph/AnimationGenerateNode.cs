@@ -25,7 +25,7 @@ public class SerializableAnimationGenerateNode {
       this.rootGameObject = new SerializableGameObject(go); }
   }
 }
-public class AnimationGenerateNode : Node, IProcessNode {
+public class AnimationGenerateNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
 
   public ObjectField animationClipField;
@@ -35,8 +35,6 @@ public class AnimationGenerateNode : Node, IProcessNode {
   void SaveAsset(GraphAsset asset) {
     asset.animationGenerateNodes.Add(new SerializableAnimationGenerateNode(this));
   }
-
-  public Action<ProcessParameter> Proceed { get; private set; }
 
   void Construct(SerializableAnimationGenerateNode serializable) {
     this.title = "AnimationGenerate";
@@ -59,21 +57,17 @@ public class AnimationGenerateNode : Node, IProcessNode {
     this.mainContainer.Add(animationClipField);
     this.mainContainer.Add(rootField);
 
-    this.Proceed = p => {
-      ProcessNode.Proceed(p, outputPort);
-    };
-
     this.mainContainer.Add(new Button(() => {
       var constructor = new AnimationConstructor(
         (rootField.value as GameObject).transform,
         animationClipField.value as AnimationClip);
       constructor.clip.ClearCurves();
       constructor.Construct(c => {
-        this.Proceed(new ProcessParameter() {
+        ProcessPort.Proceed(new ProcessParameter() {
           constructor = c,
           time = 0f,
           clip = animationClipField.value as AnimationClip,
-        });
+        }, outputPort);
       });
     }));
   }
