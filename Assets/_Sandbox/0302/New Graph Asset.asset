@@ -20,7 +20,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 375
         y: 72
-        width: 327
+        width: 320
         height: 140
     outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
     clip: {fileID: 0}
@@ -45,8 +45,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 281
         y: 301
-        width: 279
-        height: 115
+        width: 271
+        height: 117
     gameObjectPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239
     typeName: Transform
     propertyName: m_LocalPosition.x
@@ -57,7 +57,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 625
         y: 316
-        width: 254
+        width: 244
         height: 125
     propretyPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
     targetValuePortGuid: cf054bf7-f7a2-4eed-ad17-4c7d11e3771f
@@ -103,6 +103,15 @@ MonoBehaviour:
       timePortGuid: 72785db7-6fe1-46f5-be62-43a19cb09e99
       outputPortGuid: abbf4191-0c5e-425b-ad5f-78141db63941
       propertyCurvePortGuid: 
+  newSequenceNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: 662
+        y: 579
+        width: 283
+        height: 148
+    inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7
   testNodes: []
   constuntNodes: []
   floatValueNodes:
@@ -111,8 +120,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: -229
         y: 697
-        width: 195
-        height: 64
+        width: 198
+        height: 65
     value: 2.52
     outputPortGuid: 5836cbf2-e8e9-407f-8509-e06054b8c6e3
   - graphNode:
@@ -120,8 +129,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: -175
         y: 469
-        width: 195
-        height: 64
+        width: 198
+        height: 65
     value: 1.78
     outputPortGuid: 82128dd1-5549-4010-a87f-97737052eebe
   - graphNode:
@@ -129,8 +138,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: -135
         y: 595
-        width: 200
-        height: 64
+        width: 205
+        height: 65
     value: -1.73
     outputPortGuid: dbd133ab-e8d7-4cef-8fec-0074d439f846
   floatListNodes:
@@ -139,7 +148,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 230
         y: 489
-        width: 197
+        width: 195
         height: 220
     inputPortGuids:
     - df02de50-3262-4c72-8426-8447c1e461a7
