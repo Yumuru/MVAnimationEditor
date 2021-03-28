@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe5e6e1d8cb540498e9ed516f853cf8, type: 3}
   m_Name: New Graph Asset
   m_EditorClassIdentifier: 
-  viewPosition: {x: 260, y: -167, z: 0}
+  viewPosition: {x: -218, y: 30, z: 0}
   viewScale: {x: 1, y: 1, z: 1}
   animationGenerateNodes:
   - graphNode:
@@ -20,13 +20,13 @@ MonoBehaviour:
         serializedVersion: 2
         x: 375
         y: 72
-        width: 320
+        width: 282
         height: 140
     outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
-    clip: {fileID: 0}
+    clip: {fileID: 7400000, guid: f6e189f487729dc41a4a9b78e7e6d520, type: 2}
     rootGameObject:
-      assetPath: 
-      hierarchyPath: 
+      assetPath: Assets/_Sandbox/0302/New Scene.unity
+      hierarchyPath: Root
   gameObjectFieldNodes:
   - graphNode:
       position:
@@ -55,8 +55,8 @@ MonoBehaviour:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 625
-        y: 316
+        x: 545
+        y: 442
         width: 244
         height: 125
     propretyPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
@@ -88,31 +88,41 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  sequenceNodes:
-  - graphNode:
-      position:
-        serializedVersion: 2
-        x: 1013
-        y: 227
-        width: 235
-        height: 147
-    inputPortGuid: 7745f751-d828-49ac-9690-e319cb5bc45c
-    fields:
-    - type: 0
-      time: 0
-      timePortGuid: 72785db7-6fe1-46f5-be62-43a19cb09e99
-      outputPortGuid: abbf4191-0c5e-425b-ad5f-78141db63941
-      propertyCurvePortGuid: 
+  sequenceNodes: []
   newSequenceNodes:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 662
-        y: 579
-        width: 283
+        x: 1044
+        y: 357
+        width: 251
         height: 148
     inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7
-  testNodes: []
+    fields:
+    - actionPortGuid: 7757a754-e5f4-4611-a10d-7d0f46c0dedd
+      outputPortGuid: bba9d7bc-57b6-40b8-9b85-b1028c738688
+    - actionPortGuid: e4f31ddc-697e-4fd0-b2d1-58636380b484
+      outputPortGuid: ed26cb3a-7b08-46fa-9230-03ec30723cd4
+  timeNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: 811
+        y: 378
+        width: 127
+        height: 97
+    timePortGuid: 
+    time: 1.49
+    outputPortGuid: e927df3b-8426-4c6c-9c8e-ca5794ad0991
+  testNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: 1479
+        y: 455
+        width: 143
+        height: 77
+    inputPortGuid: 84932d75-595e-4520-9e13-1f20ffc253ce
   constuntNodes: []
   floatValueNodes:
   - graphNode:
@@ -166,8 +176,6 @@ MonoBehaviour:
   edges:
   - outputPortGuid: 9cf0400d-b56c-4384-8147-19b0b9a6a317
     inputPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239
-  - outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
-    inputPortGuid: 7745f751-d828-49ac-9690-e319cb5bc45c
   - outputPortGuid: 16a8d4ed-ceb4-4c28-b03c-2f239561a5cb
     inputPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
   - outputPortGuid: 82128dd1-5549-4010-a87f-97737052eebe
@@ -182,3 +190,11 @@ MonoBehaviour:
     inputPortGuid: 8166856b-e47c-48fb-8eb7-4f76d9263023
   - outputPortGuid: dbd133ab-e8d7-4cef-8fec-0074d439f846
     inputPortGuid: 8a57a040-f5a2-4df1-a304-b4c4b6741839
+  - outputPortGuid: e927df3b-8426-4c6c-9c8e-ca5794ad0991
+    inputPortGuid: 7757a754-e5f4-4611-a10d-7d0f46c0dedd
+  - outputPortGuid: e927df3b-8426-4c6c-9c8e-ca5794ad0991
+    inputPortGuid: e4f31ddc-697e-4fd0-b2d1-58636380b484
+  - outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
+    inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7
+  - outputPortGuid: ed26cb3a-7b08-46fa-9230-03ec30723cd4
+    inputPortGuid: 84932d75-595e-4520-9e13-1f20ffc253ce

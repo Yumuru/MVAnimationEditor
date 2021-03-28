@@ -7,7 +7,6 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
-using static CalculateNode;
 [Serializable]
 public class SerializableTimeNode {
   public SerializableGraphNode graphNode;
@@ -32,6 +31,10 @@ public class TimeNode : Node, ICalculateNode {
   public FloatField timeField;
   public string outputPortGuid;
 
+  public void SaveAsset(GraphAsset graphAsset) {
+    graphAsset.timeNodes.Add(new SerializableTimeNode(this));
+  }
+
   void Construct(SerializableTimeNode serializable) {
     this.title = "Time";
     
@@ -40,8 +43,30 @@ public class TimeNode : Node, ICalculateNode {
     this.timeField.labelElement.style.unityTextAlign = TextAnchor.MiddleLeft;
     this.timeField.labelElement.style.minWidth = 50;
     this.timeField.value = serializable.time;
+    this.mainContainer.Add(timeField);
 
+    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(SequenceAction));
+    this.outputPortGuid = serializable.outputPortGuid;
+    graphNode.RegisterPort(outputPort, outputPortGuid);
+    this.outputContainer.Add(outputPort);
 
+    Calculate[outputPort] = () => {
+      return new SequenceAction(p => {
+        p.time += timeField.value;
+        p.constructor.TSet(p.time);
+        return p;
+      });
+    };
+  }
+
+  public TimeNode() {
+    this.graphNode = new GraphNodeLogic(this, SaveAsset);
+    this.Construct(new SerializableTimeNode());
+  }
+  public TimeNode(GraphView graphView, SerializableTimeNode serializable) {
+    this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
+    serializable.graphNode.Load(this.graphNode as GraphNodeLogic);
+    this.Construct(serializable);
   }
 }
 }

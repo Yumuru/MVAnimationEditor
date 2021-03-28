@@ -16,6 +16,7 @@ public class SerializableNewSequenceNode {
   public SerializableGraphNode graphNode;
   public string inputPortGuid;
 
+  [Serializable]
   public class Field {
     public string actionPortGuid;
     public string outputPortGuid;
@@ -49,6 +50,7 @@ public class NewSequenceNode : Node, IProcessNode {
   public class Field : VisualElement {
     public Port actionPort;
     public string actionPortGuid;
+    public Port outputPort;
     public string outputPortGuid;
     public Action OnRemove;
     public Field(NewSequenceNode node, SerializableNewSequenceNode.Field serializable) {
@@ -58,7 +60,7 @@ public class NewSequenceNode : Node, IProcessNode {
       this.actionPortGuid = serializable.actionPortGuid;
       node.graphNode.RegisterPort(actionPort, actionPortGuid);
 
-      var outputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(ProcessParameter));
+      outputPort = ProcessPort.CreateOutput();
       this.outputPortGuid = serializable.outputPortGuid;
       node.graphNode.RegisterPort(outputPort, outputPortGuid);
 
@@ -79,7 +81,8 @@ public class NewSequenceNode : Node, IProcessNode {
 
     public ProcessParameter Proceed(ProcessParameter p) {
       var action = CalculateNode.GetCulculatedValue<SequenceAction>(actionPort);
-      if (action != null) return action(p);
+      if (action != null) p = action(p);
+      ProcessNode.Proceed(p, outputPort);
       return p;
     }
   }
@@ -127,7 +130,7 @@ public class NewSequenceNode : Node, IProcessNode {
     }
 
     var addFieldButton = new Button(() => {
-      fields.AddField(new SerializableNewSequenceNode.Field());
+      this.fields.AddField(new SerializableNewSequenceNode.Field());
     });
 
     this.mainContainer.Add(addFieldButton);

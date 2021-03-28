@@ -60,10 +60,7 @@ public class AnimationGenerateNode : Node, IProcessNode {
     this.mainContainer.Add(rootField);
 
     this.Proceed = p => {
-      foreach (var edge in outputPort.connections) {
-        var node = edge.input.node as IProcessNode;
-        node.Proceed?.Invoke(p);
-      }
+      ProcessNode.Proceed(p, outputPort);
     };
 
     this.mainContainer.Add(new Button(() => {

@@ -48,6 +48,7 @@ public class GraphAsset : ScriptableObject {
   public List<SerializablePropertyTransitionNode> propertyTransitionNodes = new List<SerializablePropertyTransitionNode>();
   public List<SerializableSequenceNode> sequenceNodes = new List<SerializableSequenceNode>();
   public List<SerializableNewSequenceNode> newSequenceNodes = new List<SerializableNewSequenceNode>();
+  public List<SerializableTimeNode> timeNodes = new List<SerializableTimeNode>();
   public List<SerializableTestNode> testNodes = new List<SerializableTestNode>();
   public List<SerializableConstuntNode> constuntNodes = new List<SerializableConstuntNode>();
   public List<SerializableFloatValueNode> floatValueNodes = new List<SerializableFloatValueNode>();
@@ -68,6 +69,7 @@ public class GraphAsset : ScriptableObject {
     propertyTransitionNodes.Clear();
     sequenceNodes.Clear();
     newSequenceNodes.Clear();
+    timeNodes.Clear();
     testNodes.Clear();
     constuntNodes.Clear();
     floatValueNodes.Clear();
@@ -116,6 +118,8 @@ public class GraphAsset : ScriptableObject {
       graphView.AddElement(new SequenceNode(graphView, serializable)); }
     foreach (var serializable in newSequenceNodes) {
       graphView.AddElement(new NewSequenceNode(graphView, serializable)); }
+    foreach (var serializable in timeNodes) {
+      graphView.AddElement(new TimeNode(graphView, serializable)); }
     foreach (var serializable in testNodes) {
       graphView.AddElement(new TestNode(graphView, serializable)); }
     foreach (var serializable in constuntNodes) {
