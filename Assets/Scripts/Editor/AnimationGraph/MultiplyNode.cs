@@ -19,9 +19,8 @@ public class SerializableMultiplyNode {
     this.outputPortGuid = node.outputPortGuid;
   }
 }
-public class MultiplyNode : Node, ICalculateNode {
+public class MultiplyNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public Dictionary<Port, Func<object>> Calculate { get; private set; } = new Dictionary<Port, Func<object>>();
   public string outputPortGuid { get; private set; }
   public CalculateValueField calculateField;
 
@@ -31,7 +30,7 @@ public class MultiplyNode : Node, ICalculateNode {
     this.calculateField = new CalculateValueField(this, serializable.calculateField);
     this.inputContainer.Add(calculateField);
 
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(float));
+    var outputPort = new BasicCalculatedOutPort<float>();
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
@@ -41,14 +40,11 @@ public class MultiplyNode : Node, ICalculateNode {
       return input.portType == typeof(float);
     };
 
-    this.Calculate[outputPort] = () => {
+    outputPort.Calculate = () => {
       var value = 1f;
       foreach (var field in calculateField.fields) {
         if (field.inputPort.connected) {
-          var port = field.inputPort.connections.First().output;
-          var node = port.node as ICalculateNode;
-          var v = node.Calculate[port]();
-          value *= (float) v;
+          value *= CalculatePort.GetCalculatedValue<float>(field.inputPort);
         } else {
           value *= field.valueField.value;
         }

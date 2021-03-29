@@ -47,9 +47,7 @@ public class CalculateValueField : VisualElement {
 
       Calculate = () => {
         if (inputPort.connected) {
-          var port = inputPort.connections.First().output;
-          var n = port.node as ICalculateNode;
-          return n.Calculate[port]();
+          return CalculatePort.GetCalculatedValue<object>(inputPort);
         } else {
           return valueField.value;
         }

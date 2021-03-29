@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,30 +17,6 @@ public class SerializableGraphNode {
 }
 public interface IGraphNode {
   IGraphNodeLogic graphNode { get; }
-}
-public interface ICalculateNode : IGraphNode {
-  Dictionary<Port, Func<object>> Calculate { get; }
-}
-public interface ICalculatedOutPort<T> {
-  Func<T> Calculate { get; set; }
-}
-public class BasicCalculatedOutPort<T> : Port, ICalculatedOutPort<T> {
-  public Func<T> Calculate { get; set; }
-  public BasicCalculatedOutPort() : base(Orientation.Horizontal, Direction.Output, Capacity.Multi, typeof(T)) { }
-  public BasicCalculatedOutPort(Func<T> calculate) : this() {
-    this.Calculate = calculate;
-  }
-}
-public static class CalculatePort {
-  public static T GetCalculatedValue<T>(Port caluculatePort) {
-    var port = caluculatePort.connections.First().output;
-    var node = port.node as ICalculateNode;
-    return (T) node.Calculate[port]();
-  }
-  public static T GetCalculatedValue_New<T>(Port calculatePort) {
-    var port = calculatePort.connections.First().output as ICalculatedOutPort<T>;
-    return port.Calculate();
-  }
 }
 public interface IGraphNodeLogic {
   Node node { get; }

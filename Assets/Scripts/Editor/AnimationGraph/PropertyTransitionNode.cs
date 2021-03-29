@@ -42,7 +42,7 @@ public struct PropertyTransition {
   public AnimationCurve curve;
 }
 
-public class PropertyTransitionNode : Node, ICalculateNode {
+public class PropertyTransitionNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public FloatField targetValueField { get; private set; }
   public CurveField curveField { get; private set; }
@@ -50,7 +50,6 @@ public class PropertyTransitionNode : Node, ICalculateNode {
   public string curvePortGuid;
   public string targetValuePortGuid;
   public string outputPortGuid;
-  public Dictionary<Port, Func<object>> Calculate { get; private set; } = new Dictionary<Port, Func<object>>();
 
   void SaveAsset(GraphAsset asset) {
     asset.propertyTransitionNodes.Add(new SerializablePropertyTransitionNode(this));
@@ -91,24 +90,21 @@ public class PropertyTransitionNode : Node, ICalculateNode {
     this.mainContainer.Add(curveElement);
 
     this.outputPortGuid = serializable.outputPortGuid;
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(PropertyTransition));
+    var outputPort = new BasicCalculatedOutPort<PropertyTransition>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    Calculate[outputPort] = () => {
-      var propertyOutput = propertyPort.connections.First().output;
-      var property = (PropertyData)(propertyOutput.node as ICalculateNode).Calculate[propertyOutput]();
+    outputPort.Calculate = () => {
+      var property = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
       float targetValue;
       if (targetValuePort.connected) {
-        var output = targetValuePort.connections.First().output;
-        targetValue = (float)(output.node as ICalculateNode).Calculate[output]();
+        targetValue = CalculatePort.GetCalculatedValue<float>(targetValuePort);
       } else {
         targetValue = targetValueField.value;
       }
       AnimationCurve curve;
       if (curvePort.connected) {
-        var output = curvePort.connections.First().output;
-        curve = (output.node as ICalculateNode).Calculate[output]() as AnimationCurve;
+        curve = CalculatePort.GetCalculatedValue<AnimationCurve>(curvePort);
       } else {
         curve = curveField.value;
       }

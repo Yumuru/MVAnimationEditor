@@ -24,11 +24,10 @@ public class SerializableCurveNode {
   }
 }
 
-public class CurveNode : Node, ICalculateNode {
+public class CurveNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public CurveField curveField { get; private set; }
   public string outputPortGuid;
-  public Dictionary<Port, Func<object>> Calculate { get; private set; } = new Dictionary<Port, Func<object>>();
 
   void SaveAsset(GraphAsset asset) {
     asset.curveNodes.Add(new SerializableCurveNode(this));
@@ -38,14 +37,14 @@ public class CurveNode : Node, ICalculateNode {
     this.title = "Curve";
 
     this.outputPortGuid = serializable.outputPortGuid;
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(AnimationCurve));
+    var outputPort = new BasicCalculatedOutPort<AnimationCurve>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
     this.curveField = new CurveField();
     curveField.value = serializable.curve;
 
-    Calculate[outputPort] = () => this.curveField.value;
+    outputPort.Calculate = () => this.curveField.value;
 
     this.mainContainer.Add(curveField);
   }

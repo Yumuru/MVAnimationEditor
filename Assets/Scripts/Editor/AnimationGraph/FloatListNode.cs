@@ -23,9 +23,8 @@ public class SerializableFloatListNode {
     this.outputPortGuid = node.outputPortGuid;
   }
 }
-public class FloatListNode : Node, ICalculateNode {
+public class FloatListNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public Dictionary<Port, Func<object>> Calculate { get; private set; } = new Dictionary<Port, Func<object>>();
   public TextField constantNameField { get; private set; }
   public FloatField valueField { get; private set; }
   public string outputPortGuid { get; private set; }
@@ -71,13 +70,13 @@ public class FloatListNode : Node, ICalculateNode {
     button.text = "Add";
     this.mainContainer.Add(button);
 
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(List<float>));
+    var outputPort = new BasicCalculatedOutPort<List<float>>();
     outputPort.portName = "List<float>";
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
     
-    this.Calculate[outputPort] = () => {
+    outputPort.Calculate = () => {
       return fields
         .Where(f => f.inputPort.connected)
         .Select(field => CalculatePort.GetCalculatedValue<float>(field.inputPort))

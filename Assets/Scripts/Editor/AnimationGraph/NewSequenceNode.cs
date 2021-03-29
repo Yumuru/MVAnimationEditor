@@ -86,7 +86,7 @@ public class NewSequenceNode : Node, IGraphNode {
     }
 
     public ProcessParameter Proceed(ProcessParameter p) {
-      var action = CalculatePort.GetCalculatedValue_New<SequenceAction>(actionPort);
+      var action = CalculatePort.GetCalculatedValue<SequenceAction>(actionPort);
       if (action != null) p = action(p);
       ProcessPort.Proceed(p, outputPort);
       return p;

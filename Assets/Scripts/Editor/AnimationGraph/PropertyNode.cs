@@ -37,11 +37,10 @@ public struct PropertyData {
   public string propertyName;
 }
 
-public class PropertyNode : Node, ICalculateNode {
+public class PropertyNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public TextField typeNameField { get; private set; }
   public TextField propertyNameField { get; private set; }
-  public Dictionary<Port, Func<object>> Calculate { get; } = new Dictionary<Port, Func<object>>();
   public string gameObjectPortGuid;
   public string outputPortGuid;
 
@@ -75,11 +74,11 @@ public class PropertyNode : Node, ICalculateNode {
     this.propertyNameField.value = serializable.propertyName;
 
     this.outputPortGuid = serializable.outputNodeGuid;
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(PropertyData));
+    var outputPort = new BasicCalculatedOutPort<PropertyData>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    this.Calculate[outputPort] = () => {
+    outputPort.Calculate = () => {
       var gameObject = CalculatePort.GetCalculatedValue<GameObject>(gameObjectPort);
       return new PropertyData() {
         gameObject = gameObject,

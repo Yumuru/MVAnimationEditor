@@ -26,10 +26,9 @@ public class SerializableGameObjectFieldNode {
   }
 }
 
-public class GameObjectFieldNode : Node, ICalculateNode {
+public class GameObjectFieldNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public ObjectField gameObjectField { get; private set; }
-  public Dictionary<Port, Func<object>> Calculate { get; } = new Dictionary<Port, Func<object>>();
   public string outputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
@@ -45,11 +44,11 @@ public class GameObjectFieldNode : Node, ICalculateNode {
     this.gameObjectField.value = serializable.gameObject?.Find();
 
     this.outputPortGuid = serializable.outputNodeGuid;
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(GameObject));
+    var outputPort = new BasicCalculatedOutPort<GameObject>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    this.Calculate[outputPort] = () => { return gameObjectField.value; };
+    outputPort.Calculate = () => { return gameObjectField.value as GameObject; };
 
     this.mainContainer.Add(gameObjectField);
   }

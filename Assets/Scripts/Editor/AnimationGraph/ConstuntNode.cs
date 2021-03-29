@@ -26,9 +26,8 @@ public class SerializableConstuntNode {
     this.outputPortGuid = node.outputPortGuid;
   }
 }
-public class ConstuntNode : Node, ICalculateNode {
+public class ConstuntNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public Dictionary<Port, Func<object>> Calculate { get; private set; } = new Dictionary<Port, Func<object>>();
   public TextField constantNameField { get; private set; }
   public FloatField valueField { get; private set; }
   public string inputPortGuid { get; private set; }
@@ -37,7 +36,7 @@ public class ConstuntNode : Node, ICalculateNode {
   void Construct(SerializableConstuntNode serializable) {
     this.title = "Constunt";
     var inputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(float));
-    var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(float));
+    var outputPort = new BasicCalculatedOutPort<float>();
     this.inputPortGuid = serializable.inputPortGuid;
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(inputPort, inputPortGuid);
@@ -52,11 +51,9 @@ public class ConstuntNode : Node, ICalculateNode {
     this.mainContainer.Add(constantNameField);
     this.mainContainer.Add(valueField);
     
-    this.Calculate[outputPort] = () => {
+    outputPort.Calculate = () => {
       if (inputPort.connected) {
-        var port = inputPort.connections.First().output;
-        var node = port.node as ICalculateNode;
-        return node.Calculate[port]();
+        return CalculatePort.GetCalculatedValue<float>(inputPort);
       } else {
         return valueField.value;
       }
