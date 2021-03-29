@@ -36,7 +36,7 @@ public class FloatListNode : Node, IGraphNode {
     public Field(FloatListNode node, string inputPortGuid) {
       this.inputPortGuid = inputPortGuid;
       this.style.flexDirection = FlexDirection.Row;
-      inputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(float));
+      inputPort = CalculatePort.CreateCalculateInPort<float>();
       node.graphNode.RegisterPort(inputPort, inputPortGuid);
       this.Add(inputPort);
       var deleteButton = new Button(() => OnRemove());

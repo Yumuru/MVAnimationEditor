@@ -44,17 +44,19 @@ public class TimeNode : Node, IGraphNode {
     this.timeField.value = serializable.time;
     this.mainContainer.Add(timeField);
 
+    var setValuePort = CalculatePort.CreateCalculateInPort<float>();
+
     var outputPort = new SequenceActionPort(true);
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
     outputPort.Calculate = () => {
-      return new SequenceAction(p => {
+      return p => {
         p.time += timeField.value;
         p.constructor.TSet(p.time);
         return p;
-      });
+      };
     };
   }
 

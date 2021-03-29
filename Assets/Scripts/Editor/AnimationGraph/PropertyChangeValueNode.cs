@@ -8,14 +8,14 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 [Serializable]
-public class SerializablePropertyTransitionNode {
+public class SerializablePropertyChangeValueNode {
   public SerializableGraphNode graphNode;
   public string propretyPortGuid;
   public string targetValuePortGuid;
   public string curvePortGuid;
   public string outputPortGuid;
   public AnimationCurve curve;
-  public SerializablePropertyTransitionNode() {
+  public SerializablePropertyChangeValueNode() {
     this.propretyPortGuid = Guid.NewGuid().ToString();
     this.targetValuePortGuid = Guid.NewGuid().ToString();
     this.curvePortGuid = Guid.NewGuid().ToString();
@@ -24,7 +24,7 @@ public class SerializablePropertyTransitionNode {
     curve.AddKey(0f, 0f);
     curve.AddKey(1f, 1f);
   }
-  public SerializablePropertyTransitionNode(PropertyTransitionNode node) {
+  public SerializablePropertyChangeValueNode(PropertyChangeValueNode node) {
     this.graphNode = new SerializableGraphNode(node.graphNode);
     this.propretyPortGuid = node.propertyPortGuid;
     this.targetValuePortGuid = node.targetValuePortGuid;
@@ -34,13 +34,12 @@ public class SerializablePropertyTransitionNode {
   }
 }
 
-public struct PropertyTransition {
+public struct PropertyChangeValue {
   public PropertyData property;
   public float targetValue;
-  public AnimationCurve curve;
 }
 
-public class PropertyTransitionNode : Node, IGraphNode {
+public class PropertyChangeValueNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public CurveField curveField { get; private set; }
   public string propertyPortGuid;
@@ -49,38 +48,25 @@ public class PropertyTransitionNode : Node, IGraphNode {
   public string outputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
-    asset.propertyTransitionNodes.Add(new SerializablePropertyTransitionNode(this));
+    asset.propertyChangeValueNodes.Add(new SerializablePropertyChangeValueNode(this));
   }
 
-  void Construct(SerializablePropertyTransitionNode serializable) {
-    this.title = "Property Transition";
+  void Construct(SerializablePropertyChangeValueNode serializable) {
+    this.title = "Property Value Change";
 
     this.propertyPortGuid = serializable.propretyPortGuid;
     var propertyPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PropertyData));
     this.graphNode.RegisterPort(propertyPort, propertyPortGuid);
     this.inputContainer.Add(propertyPort);
 
-    this.targetValuePortGuid = serializable.targetValuePortGuid;
     var targetValuePort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
-    targetValuePort.portName = "Traget Value";
+    this.targetValuePortGuid = serializable.targetValuePortGuid;
+    targetValuePort.portName = "Target Value";
     this.graphNode.RegisterPort(targetValuePort, targetValuePortGuid);
-    //targetValueField.label = "Target Value";
-    this.mainContainer.Add(targetValuePort);
+    this.inputContainer.Add(targetValuePort);
 
-    var curveElement = new VisualElement();
-    curveElement.style.flexDirection = FlexDirection.Row;
-    this.curvePortGuid = serializable.curvePortGuid;
-    var curvePort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(AnimationCurve));
-    this.graphNode.RegisterPort(curvePort, curvePortGuid);
-    this.curveField = new CurveField();
-    curveField.value = serializable.curve;
-    curveField.style.minWidth = 100;
-    curveElement.Add(curvePort);
-    curveElement.Add(curveField);
-    this.mainContainer.Add(curveElement);
-
+    var outputPort = new BasicCalculatedOutPort<PropertyChangeValue>();
     this.outputPortGuid = serializable.outputPortGuid;
-    var outputPort = new BasicCalculatedOutPort<PropertyTransition>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
@@ -90,22 +76,16 @@ public class PropertyTransitionNode : Node, IGraphNode {
       if (targetValuePort.connected) {
         targetValue = CalculatePort.GetCalculatedValue<float>(targetValuePort);
       } else return default;
-      AnimationCurve curve;
-      if (curvePort.connected) {
-        curve = CalculatePort.GetCalculatedValue<AnimationCurve>(curvePort);
-      } else {
-        curve = curveField.value;
-      }
-      return new PropertyTransition()
-        { property = property, targetValue = targetValue, curve = curve };
+      return new PropertyChangeValue()
+        { property = property, targetValue = targetValue };
     };
   }
   
-  public PropertyTransitionNode() {
+  public PropertyChangeValueNode() {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
-    this.Construct(new SerializablePropertyTransitionNode());
+    this.Construct(new SerializablePropertyChangeValueNode());
   }
-  public PropertyTransitionNode(GraphView graphView, SerializablePropertyTransitionNode serializable) {
+  public PropertyChangeValueNode(GraphView graphView, SerializablePropertyChangeValueNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

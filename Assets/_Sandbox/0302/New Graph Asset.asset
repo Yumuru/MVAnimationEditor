@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe5e6e1d8cb540498e9ed516f853cf8, type: 3}
   m_Name: New Graph Asset
   m_EditorClassIdentifier: 
-  viewPosition: {x: -218, y: 30, z: 0}
+  viewPosition: {x: 10, y: 4, z: 0}
   viewScale: {x: 1, y: 1, z: 1}
   animationGenerateNodes:
   - graphNode:
       position:
         serializedVersion: 2
-        x: 375
-        y: 72
-        width: 282
+        x: 536
+        y: 163
+        width: 287
         height: 140
     outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
     clip: {fileID: 7400000, guid: f6e189f487729dc41a4a9b78e7e6d520, type: 2}
@@ -33,7 +33,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: -217
         y: 326
-        width: 230
+        width: 231
         height: 97
     gameObject:
       assetPath: Assets/_Sandbox/0302/New Scene.unity
@@ -45,7 +45,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 281
         y: 301
-        width: 271
+        width: 277
         height: 117
     gameObjectPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239
     typeName: Transform
@@ -57,13 +57,12 @@ MonoBehaviour:
         serializedVersion: 2
         x: 545
         y: 442
-        width: 244
+        width: 253
         height: 125
     propretyPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
     targetValuePortGuid: cf054bf7-f7a2-4eed-ad17-4c7d11e3771f
     curvePortGuid: d3027657-e276-48ba-bbd3-5da13f93abc5
     outputPortGuid: ccccbb4d-1e4e-46d3-af5a-54a1e94256e5
-    targetValue: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -95,7 +94,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1044
         y: 357
-        width: 251
+        width: 260
         height: 148
     inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7
     fields:
@@ -109,18 +108,19 @@ MonoBehaviour:
         serializedVersion: 2
         x: 811
         y: 378
-        width: 127
+        width: 132
         height: 97
     timePortGuid: 
     time: 1.49
     outputPortGuid: e927df3b-8426-4c6c-9c8e-ca5794ad0991
+  propertyChangeValueNodes: []
   testNodes:
   - graphNode:
       position:
         serializedVersion: 2
         x: 1479
         y: 455
-        width: 143
+        width: 139
         height: 77
     inputPortGuid: 84932d75-595e-4520-9e13-1f20ffc253ce
   constuntNodes: []
@@ -148,7 +148,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: -135
         y: 595
-        width: 205
+        width: 203
         height: 65
     value: -1.73
     outputPortGuid: dbd133ab-e8d7-4cef-8fec-0074d439f846
@@ -158,7 +158,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 230
         y: 489
-        width: 195
+        width: 200
         height: 220
     inputPortGuids:
     - df02de50-3262-4c72-8426-8447c1e461a7
@@ -194,7 +194,7 @@ MonoBehaviour:
     inputPortGuid: 7757a754-e5f4-4611-a10d-7d0f46c0dedd
   - outputPortGuid: e927df3b-8426-4c6c-9c8e-ca5794ad0991
     inputPortGuid: e4f31ddc-697e-4fd0-b2d1-58636380b484
-  - outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
-    inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7
   - outputPortGuid: ed26cb3a-7b08-46fa-9230-03ec30723cd4
     inputPortGuid: 84932d75-595e-4520-9e13-1f20ffc253ce
+  - outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
+    inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7

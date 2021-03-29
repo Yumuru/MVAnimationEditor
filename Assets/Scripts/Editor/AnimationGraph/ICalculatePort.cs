@@ -14,6 +14,9 @@ public class BasicCalculatedOutPort<T> : Port, ICalculatedOutPort<T> {
   }
 }
 public static class CalculatePort {
+  public static Port CreateCalculateInPort<T>() {
+    return Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(T));
+  }
   public static T GetCalculatedValue<T>(Port calculatePort) {
     var port = calculatePort.connections.First().output as ICalculatedOutPort<T>;
     return port.Calculate();
