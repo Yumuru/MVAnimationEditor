@@ -37,14 +37,14 @@ public class CurveNode : Node, IGraphNode {
     this.title = "Curve";
 
     this.outputPortGuid = serializable.outputPortGuid;
-    var outputPort = new BasicCalculatedOutPort<AnimationCurve>();
+    var outputPort = CalculatePort.CreateOutput<AnimationCurve>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
     this.curveField = new CurveField();
     curveField.value = serializable.curve;
 
-    outputPort.Calculate = () => this.curveField.value;
+    outputPort.SetCalculate<AnimationCurve>(() => this.curveField.value);
 
     this.mainContainer.Add(curveField);
   }

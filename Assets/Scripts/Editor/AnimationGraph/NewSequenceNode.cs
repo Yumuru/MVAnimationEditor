@@ -8,13 +8,12 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 public delegate ProcessParameter SequenceAction(ProcessParameter processParameter);
-public class SequenceActionPort : BasicCalculatedOutPort<SequenceAction> {
+public class SequenceActionParameter {
   public bool canUseProcessOutput;
-  public SequenceActionPort(bool canUseProcessOutput) : base() {
+  public Calculate<SequenceAction> Calculate; 
+  public SequenceActionParameter(bool canUseProcessOutput, Calculate<SequenceAction> calculate) {
     this.canUseProcessOutput = canUseProcessOutput;
-  }
-  public SequenceActionPort(bool canUseProcessOutput, Func<SequenceAction> calculate) : base(calculate) {
-    this.canUseProcessOutput = canUseProcessOutput;
+    this.Calculate = calculate;
   }
 }
 
@@ -86,7 +85,7 @@ public class NewSequenceNode : Node, IGraphNode {
     }
 
     public ProcessParameter Proceed(ProcessParameter p) {
-      var action = CalculatePort.GetCalculatedValue<SequenceAction>(actionPort);
+      var action = CalculatePort.GetCalculatedValue(actionPort, s => (s as SequenceActionParameter).Calculate);
       if (action != null) p = action(p);
       ProcessPort.Proceed(p, outputPort);
       return p;
@@ -141,9 +140,9 @@ public class NewSequenceNode : Node, IGraphNode {
 
     this.mainContainer.Add(addFieldButton);
 
-    inputPort.OnProceed = p => {
+    inputPort.SetProceed(p => {
       fields.Proceed(p);
-    };
+    });
   }
 
   void SaveAsset(GraphAsset asset) {

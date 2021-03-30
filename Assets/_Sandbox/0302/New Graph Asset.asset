@@ -20,7 +20,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 536
         y: 163
-        width: 287
+        width: 282
         height: 140
     outputPortGuid: 14a18a4c-9790-4795-a4b0-2f98607d8693
     clip: {fileID: 7400000, guid: f6e189f487729dc41a4a9b78e7e6d520, type: 2}
@@ -33,7 +33,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: -217
         y: 326
-        width: 231
+        width: 230
         height: 97
     gameObject:
       assetPath: Assets/_Sandbox/0302/New Scene.unity
@@ -45,7 +45,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 281
         y: 301
-        width: 277
+        width: 271
         height: 117
     gameObjectPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239
     typeName: Transform
@@ -57,7 +57,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 545
         y: 442
-        width: 253
+        width: 244
         height: 125
     propretyPortGuid: 34be02d3-e099-4b4a-87df-e0aae56bfe67
     targetValuePortGuid: cf054bf7-f7a2-4eed-ad17-4c7d11e3771f
@@ -94,7 +94,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1044
         y: 357
-        width: 260
+        width: 251
         height: 148
     inputPortGuid: d9122e3c-6fc4-49f4-8c75-c66055812cf7
     fields:
@@ -108,7 +108,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 811
         y: 378
-        width: 132
+        width: 127
         height: 97
     timePortGuid: 
     time: 1.49
@@ -120,10 +120,9 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1479
         y: 455
-        width: 139
+        width: 143
         height: 77
     inputPortGuid: 84932d75-595e-4520-9e13-1f20ffc253ce
-  constuntNodes: []
   floatValueNodes:
   - graphNode:
       position:
@@ -148,7 +147,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: -135
         y: 595
-        width: 203
+        width: 205
         height: 65
     value: -1.73
     outputPortGuid: dbd133ab-e8d7-4cef-8fec-0074d439f846
@@ -158,7 +157,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 230
         y: 489
-        width: 200
+        width: 195
         height: 220
     inputPortGuids:
     - df02de50-3262-4c72-8426-8447c1e461a7
@@ -169,10 +168,7 @@ MonoBehaviour:
     - 9cf6eb3c-053c-4fe1-aef0-e40614d19681
     outputPortGuid: 52f06efd-1ea6-4ac3-89fa-55827b12e3cd
   curveNodes: []
-  addNodes: []
   multiplyNodes: []
-  sinNodes: []
-  cosNodes: []
   edges:
   - outputPortGuid: 9cf0400d-b56c-4384-8147-19b0b9a6a317
     inputPortGuid: 3615a6ff-d57d-4fb0-9f2a-404c56447239

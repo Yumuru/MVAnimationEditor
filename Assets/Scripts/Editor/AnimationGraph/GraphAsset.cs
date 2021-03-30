@@ -51,14 +51,10 @@ public class GraphAsset : ScriptableObject {
   public List<SerializableTimeNode> timeNodes = new List<SerializableTimeNode>();
   public List<SerializablePropertyChangeValueNode> propertyChangeValueNodes = new List<SerializablePropertyChangeValueNode>();
   public List<SerializableTestNode> testNodes = new List<SerializableTestNode>();
-  public List<SerializableConstuntNode> constuntNodes = new List<SerializableConstuntNode>();
   public List<SerializableFloatValueNode> floatValueNodes = new List<SerializableFloatValueNode>();
   public List<SerializableFloatListNode> floatListNodes = new List<SerializableFloatListNode>();
   public List<SerializableCurveNode> curveNodes = new List<SerializableCurveNode>();
-  public List<SerializableAddNode> addNodes = new List<SerializableAddNode>();
   public List<SerializableMultiplyNode> multiplyNodes = new List<SerializableMultiplyNode>();
-  public List<SerializableSinNode> sinNodes = new List<SerializableSinNode>();
-  public List<SerializableCosNode> cosNodes = new List<SerializableCosNode>();
   public List<SerializableEdge> edges = new List<SerializableEdge>();
   public void SaveAsset(GraphView graphView) {
     viewPosition = graphView.viewTransform.position;
@@ -73,14 +69,10 @@ public class GraphAsset : ScriptableObject {
     timeNodes.Clear();
     propertyChangeValueNodes.Clear();
     testNodes.Clear();
-    constuntNodes.Clear();
     floatValueNodes.Clear();
     floatListNodes.Clear();
     curveNodes.Clear();
-    addNodes.Clear();
     multiplyNodes.Clear();
-    sinNodes.Clear();
-    cosNodes.Clear();
     edges.Clear();
 
     graphView.nodes.ForEach(n => {
@@ -126,22 +118,14 @@ public class GraphAsset : ScriptableObject {
       graphView.AddElement(new PropertyChangeValueNode(graphView, serializable)); }
     foreach (var serializable in testNodes) {
       graphView.AddElement(new TestNode(graphView, serializable)); }
-    foreach (var serializable in constuntNodes) {
-      graphView.AddElement(new ConstuntNode(graphView, serializable)); }
     foreach (var serializable in floatValueNodes) {
       graphView.AddElement(new FloatValueNode(graphView, serializable)); }
     foreach (var serializable in floatListNodes) {
       graphView.AddElement(new FloatListNode(graphView, serializable)); }
     foreach (var serializable in curveNodes) {
       graphView.AddElement(new CurveNode(graphView, serializable)); }
-    foreach (var serializable in addNodes) {
-      graphView.AddElement(new AddNode(graphView, serializable)); }
     foreach (var serializable in multiplyNodes) {
       graphView.AddElement(new MultiplyNode(graphView, serializable)); }
-    foreach (var serializable in sinNodes) {
-      graphView.AddElement(new SinNode(graphView, serializable)); }
-    foreach (var serializable in cosNodes) {
-      graphView.AddElement(new CosNode(graphView, serializable)); }
 
     var nodes = graphView.nodes.ToList()
       .Cast<IGraphNode>().Select(n => n.graphNode).ToList();

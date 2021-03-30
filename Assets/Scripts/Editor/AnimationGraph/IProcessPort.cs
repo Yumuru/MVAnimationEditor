@@ -4,36 +4,31 @@ using UnityEditor.Experimental.GraphView;
 using Yumuru;
 
 namespace AnimationGraph {
-
+public delegate void Proceed(ProcessParameter process);
 public struct ProcessParameter {
   public AnimationConstructor.Constructor constructor;
   public float time;
   public AnimationClip clip;
 }
 
-public interface IProcessPort {
-  Action<ProcessParameter> OnProceed { get; set; }
-}
-public class ProcessPort : Port, IProcessPort {
-  public Action<ProcessParameter> OnProceed { get; set; }
-  public ProcessPort(Orientation orientation, Direction direction, Capacity capacity, Type type) : base(orientation, direction, capacity, type) { }
-
-  public static void Proceed(ProcessParameter parameter, Port port) {
-    foreach (var edge in port.connections) {
-      var processPort = edge.input as IProcessPort;
-      processPort.OnProceed(parameter);
-    }
+public static class ProcessPort {
+  public static Port CreateInput() { 
+    return Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ProcessPort));
   }
-  public static ProcessPort CreateInput() { 
-    return new ProcessPort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ProcessPort));
-  }
-  public static ProcessPort CreateInput(Action<ProcessParameter> onProceed) { 
+  public static Port CreateInput(Proceed proceed) { 
     var port = CreateInput();
-    port.OnProceed = onProceed;
+    port.source = proceed;
     return port;
   }
   public static Port CreateOutput() { 
     return Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(ProcessPort));
+  }
+  public static void SetProceed(this Port inputPort, Proceed proceed) { inputPort.source = proceed; }
+  public static void Proceed(ProcessParameter parameter, Port port) {
+    foreach (var edge in port.connections) {
+      var proceed = edge.input.source as Proceed;
+      proceed?.Invoke(parameter);
+    }
   }
 }
 }

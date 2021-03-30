@@ -44,11 +44,11 @@ public class GameObjectFieldNode : Node, IGraphNode {
     this.gameObjectField.value = serializable.gameObject?.Find();
 
     this.outputPortGuid = serializable.outputNodeGuid;
-    var outputPort = new BasicCalculatedOutPort<GameObject>();
+    var outputPort = CalculatePort.CreateOutput<GameObject>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.Calculate = () => { return gameObjectField.value as GameObject; };
+    outputPort.SetCalculate<GameObject>(() => { return gameObjectField.value as GameObject; });
 
     this.mainContainer.Add(gameObjectField);
   }

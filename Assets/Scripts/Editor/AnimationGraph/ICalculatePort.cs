@@ -3,23 +3,23 @@ using System.Linq;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
+public delegate T Calculate<T>();
 public interface ICalculatedOutPort<T> {
   Func<T> Calculate { get; set; }
 }
-public class BasicCalculatedOutPort<T> : Port, ICalculatedOutPort<T> {
-  public Func<T> Calculate { get; set; }
-  public BasicCalculatedOutPort() : base(Orientation.Horizontal, Direction.Output, Capacity.Multi, typeof(T)) { }
-  public BasicCalculatedOutPort(Func<T> calculate) : this() {
-    this.Calculate = calculate;
-  }
-}
 public static class CalculatePort {
-  public static Port CreateCalculateInPort<T>() {
+  public static Port CreateInput<T>() {
     return Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(T));
   }
+  public static Port CreateOutput<T>() {
+    return Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(T));
+  }
+  public static void SetCalculate<T>(this Port outputPort, Calculate<T> calculate) { outputPort.source = calculate; }
+  public static T GetCalculatedValue<T>(Port calculatePort, Func<object, Calculate<T>> selector) {
+    return selector(calculatePort.connections.First().output.source)();
+  }
   public static T GetCalculatedValue<T>(Port calculatePort) {
-    var port = calculatePort.connections.First().output as ICalculatedOutPort<T>;
-    return port.Calculate();
+    return GetCalculatedValue<T>(calculatePort, v => v as Calculate<T>);
   }
 }
 }

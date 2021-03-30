@@ -74,11 +74,11 @@ public class PropertyNode : Node, IGraphNode {
     this.propertyNameField.value = serializable.propertyName;
 
     this.outputPortGuid = serializable.outputNodeGuid;
-    var outputPort = new BasicCalculatedOutPort<PropertyData>();
+    var outputPort = CalculatePort.CreateOutput<PropertyData>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.Calculate = () => {
+    outputPort.SetCalculate<PropertyData>(() => {
       var gameObject = CalculatePort.GetCalculatedValue<GameObject>(gameObjectPort);
       return new PropertyData() {
         gameObject = gameObject,
@@ -86,7 +86,7 @@ public class PropertyNode : Node, IGraphNode {
         type = GetType(typeNameField.value),
         propertyName = propertyNameField.value
       };
-    };
+    });
 
     this.mainContainer.Add(typeNameField);
     this.mainContainer.Add(propertyNameField);

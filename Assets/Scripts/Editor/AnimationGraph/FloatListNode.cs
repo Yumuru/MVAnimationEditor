@@ -36,7 +36,7 @@ public class FloatListNode : Node, IGraphNode {
     public Field(FloatListNode node, string inputPortGuid) {
       this.inputPortGuid = inputPortGuid;
       this.style.flexDirection = FlexDirection.Row;
-      inputPort = CalculatePort.CreateCalculateInPort<float>();
+      inputPort = CalculatePort.CreateInput<float>();
       node.graphNode.RegisterPort(inputPort, inputPortGuid);
       this.Add(inputPort);
       var deleteButton = new Button(() => OnRemove());
@@ -70,18 +70,18 @@ public class FloatListNode : Node, IGraphNode {
     button.text = "Add";
     this.mainContainer.Add(button);
 
-    var outputPort = new BasicCalculatedOutPort<List<float>>();
+    var outputPort = CalculatePort.CreateOutput<List<float>>();
     outputPort.portName = "List<float>";
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
     
-    outputPort.Calculate = () => {
+    outputPort.SetCalculate<List<float>>(() => {
       return fields
         .Where(f => f.inputPort.connected)
         .Select(field => CalculatePort.GetCalculatedValue<float>(field.inputPort))
         .ToList();
-    };
+    });
   }
   
   void SaveAsset(GraphAsset asset) {

@@ -186,9 +186,9 @@ public class SequenceNode : Node, IGraphNode {
     this.mainContainer.Add(propertyCurveButton);
     this.mainContainer.Add(timeButton);
 
-    inputPort.OnProceed = p => {
+    inputPort.SetProceed(p => {
       sequenceField.Proceed(p);
-    };
+    });
   }
 
   void SaveAsset(GraphAsset asset) {

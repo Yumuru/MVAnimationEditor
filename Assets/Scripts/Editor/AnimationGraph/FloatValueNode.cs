@@ -32,7 +32,7 @@ public class FloatValueNode : Node, IGraphNode {
     this.titleButtonContainer.Clear();
 
     this.inputContainer.RemoveFromHierarchy();
-    var outputPort = new BasicCalculatedOutPort<float>();
+    var outputPort = CalculatePort.CreateOutput<float>();
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
@@ -41,7 +41,7 @@ public class FloatValueNode : Node, IGraphNode {
     valueField.value = serializable.value;
     this.mainContainer.Add(valueField);
     
-    outputPort.Calculate = () => valueField.value;
+    outputPort.SetCalculate<float>(() => valueField.value);
   }
   
   void SaveAsset(GraphAsset asset) {
@@ -51,7 +51,6 @@ public class FloatValueNode : Node, IGraphNode {
   // New
   public FloatValueNode() {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
-    var serializable = new SerializableConstuntNode();
     this.Construct(new SerializableFloatValueNode());
   }
   

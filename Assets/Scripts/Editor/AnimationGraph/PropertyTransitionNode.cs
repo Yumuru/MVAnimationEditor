@@ -80,11 +80,11 @@ public class PropertyTransitionNode : Node, IGraphNode {
     this.mainContainer.Add(curveElement);
 
     this.outputPortGuid = serializable.outputPortGuid;
-    var outputPort = new BasicCalculatedOutPort<PropertyTransition>();
+    var outputPort = CalculatePort.CreateOutput<PropertyTransition>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.Calculate = () => {
+    outputPort.SetCalculate<PropertyTransition>(() => {
       var property = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
       float targetValue;
       if (targetValuePort.connected) {
@@ -98,7 +98,7 @@ public class PropertyTransitionNode : Node, IGraphNode {
       }
       return new PropertyTransition()
         { property = property, targetValue = targetValue, curve = curve };
-    };
+    });
   }
   
   public PropertyTransitionNode() {

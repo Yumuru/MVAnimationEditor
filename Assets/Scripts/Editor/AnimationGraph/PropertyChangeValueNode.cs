@@ -65,12 +65,12 @@ public class PropertyChangeValueNode : Node, IGraphNode {
     this.graphNode.RegisterPort(targetValuePort, targetValuePortGuid);
     this.inputContainer.Add(targetValuePort);
 
-    var outputPort = new BasicCalculatedOutPort<PropertyChangeValue>();
+    var outputPort = CalculatePort.CreateOutput<PropertyChangeValue>();
     this.outputPortGuid = serializable.outputPortGuid;
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.Calculate = () => {
+    outputPort.SetCalculate<PropertyChangeValue>(() => {
       var property = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
       float targetValue;
       if (targetValuePort.connected) {
@@ -78,7 +78,7 @@ public class PropertyChangeValueNode : Node, IGraphNode {
       } else return default;
       return new PropertyChangeValue()
         { property = property, targetValue = targetValue };
-    };
+    });
   }
   
   public PropertyChangeValueNode() {

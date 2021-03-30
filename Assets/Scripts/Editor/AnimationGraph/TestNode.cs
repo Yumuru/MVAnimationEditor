@@ -33,9 +33,9 @@ public class TestNode : Node, IGraphNode {
     this.inputContainer.Add(inputPort);
     this.outputContainer.RemoveFromHierarchy();
 
-    inputPort.OnProceed = p => {
+    inputPort.SetProceed(p => {
       Debug.Log(p.time);
-    };
+    });
   }
 
   public TestNode() {
