@@ -9,6 +9,11 @@ using UnityEditor.Experimental.GraphView;
 namespace AnimationGraph {
 [Serializable]
 public class SerializableProcedureNode {
+}
+public class ProcedureNode {
+  public string procedureName;
+  public ProcedureNode() {
 
+  }
 }
 }

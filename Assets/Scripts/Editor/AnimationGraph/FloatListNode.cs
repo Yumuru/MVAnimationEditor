@@ -76,7 +76,7 @@ public class FloatListNode : Node, IGraphNode {
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
     
-    outputPort.SetCalculate<List<float>>(() => {
+    outputPort.source = new PortObject<List<float>>(() => {
       return fields
         .Where(f => f.inputPort.connected)
         .Select(field => CalculatePort.GetCalculatedValue<float>(field.inputPort))
@@ -95,7 +95,7 @@ public class FloatListNode : Node, IGraphNode {
   }
   
   // Load
-  public FloatListNode(GraphView graphView, SerializableFloatListNode serializable) {
+  public FloatListNode(AnimationGraphView graphView, SerializableFloatListNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(this.graphNode as GraphNodeLogic);
     this.Construct(serializable);

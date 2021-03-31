@@ -8,9 +8,9 @@ using UnityEditor.Experimental.GraphView;
 namespace AnimationGraph {
 public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
   private AnimationGraphWindow window;
-  private GraphView graphView;
+  private AnimationGraphView graphView;
 
-  public SearchWindowProvider(AnimationGraphWindow window, GraphView graphView) {
+  public SearchWindowProvider(AnimationGraphWindow window, AnimationGraphView graphView) {
     this.window = window;
     this.graphView = graphView;
   }

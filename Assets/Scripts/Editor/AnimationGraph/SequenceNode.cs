@@ -7,39 +7,34 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
+public class SequenceActionParameter : IPortObject<Proceed> {
+  public bool canUseProcessOutput;
+  public Func<Proceed> getter { get; private set; }
+  public SequenceActionParameter(bool canUseProcessOutput, Func<Proceed> getter) {
+    this.canUseProcessOutput = canUseProcessOutput;
+    this.getter = getter;
+  }
+}
+
 [Serializable]
 public class SerializableSequenceNode {
-  public enum FieldType {
-    Time,
-    PropertyTransition,
-  }
-  [Serializable]
-  public class Field {
-    public FieldType type;
-    public float time;
-    public string timePortGuid;
-    public string outputPortGuid;
-    public string propertyCurvePortGuid;
-    public Field(FieldType type) {
-      this.type = type;
-      this.timePortGuid = Guid.NewGuid().ToString();
-      this.propertyCurvePortGuid = Guid.NewGuid().ToString();
-      this.outputPortGuid = Guid.NewGuid().ToString();
-    }
-    public Field(SequenceNode.SequenceField.IField field) {
-      if (field is SequenceNode.SequenceField.TimeField timeField) {
-        this.type = FieldType.Time;
-        this.time = timeField.time.value;
-        this.timePortGuid = timeField.timePortGuid;
-        this.outputPortGuid = timeField.outputPortGuid;
-      } else if (field is SequenceNode.SequenceField.PropertyTransitionInput propertyCurve) {
-        this.type = FieldType.PropertyTransition;
-        this.propertyCurvePortGuid = propertyCurve.propertyCurvePortGuid;
-      }
-    }
-  }
   public SerializableGraphNode graphNode;
   public string inputPortGuid;
+
+  [Serializable]
+  public class Field {
+    public string actionPortGuid;
+    public string outputPortGuid;
+    public Field() {
+      this.actionPortGuid = Guid.NewGuid().ToString();
+      this.outputPortGuid = Guid.NewGuid().ToString();
+    }
+    public Field(SequenceNode.Field field) {
+      this.actionPortGuid = field.actionPortGuid;
+      this.outputPortGuid = field.outputPortGuid;
+    }
+  }
+
   public List<Field> fields = new List<Field>();
   public SerializableSequenceNode() {
     inputPortGuid = Guid.NewGuid().ToString();
@@ -47,7 +42,7 @@ public class SerializableSequenceNode {
   public SerializableSequenceNode(SequenceNode node) {
     this.graphNode = new SerializableGraphNode(node.graphNode);
     this.inputPortGuid = node.inputPortGuid;
-    foreach (var field in node.sequenceField.fields) {
+    foreach (var field in node.fields.fields) {
       this.fields.Add(new Field(field));
     }
   }
@@ -55,106 +50,74 @@ public class SerializableSequenceNode {
 public class SequenceNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public string inputPortGuid;
-  public class SequenceField : VisualElement {
-    public interface IField { }
-    public class TimeField : VisualElement, IField {
-      public FloatField time;
-      public Port timePort;
-      public string timePortGuid;
-      public Port outputPort;
-      public string outputPortGuid;
-      public Action OnRemove { get; set; }
-      public TimeField(SerializableSequenceNode.Field serializable) {
-        this.style.flexDirection = FlexDirection.Row;
-        time = new FloatField();
-        time.label = "Time";
-        time.labelElement.style.unityTextAlign = TextAnchor.MiddleLeft;
-        time.labelElement.style.minWidth = 50;
-        time.value = serializable.time;
-        timePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(float));
-        timePort.portName = "";
-        timePortGuid = serializable.timePortGuid;
-        this.RegisterCallback((GeometryChangedEvent evt) => {
-          //time.SetEnabled(!timePort.connected);
-        });
-        outputPort = ProcessPort.CreateOutput();
-        outputPortGuid = serializable.outputPortGuid;
-        this.Add(timePort);
-        this.Add(time);
-        var deleteButton = new Button(() => OnRemove());
-        deleteButton.text = "X";
-        this.Add(deleteButton);
-        this.Add(outputPort);
-      }
-    }
-    public class PropertyTransitionInput : VisualElement, IField {
-      public Port propertyCurvePort;
-      public string propertyCurvePortGuid;
-      public Action OnRemove { get; set; }
-      public PropertyTransitionInput(SerializableSequenceNode.Field serializable) {
-        this.style.flexDirection = FlexDirection.Row;
-        propertyCurvePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(PropertyTransition));
-        propertyCurvePortGuid = serializable.propertyCurvePortGuid;
-        var deleteButton = new Button(() => OnRemove());
-        deleteButton.text = "X";
-        this.Add(propertyCurvePort);
-        this.Add(deleteButton);
-      }
-    }
-    public SequenceNode node;
-    public List<IField> fields = new List<IField>();
-    public SequenceField(SequenceNode node) { this.node = node; }
-    public void AddField(TimeField field) {
-      node.graphNode.RegisterPort(field.timePort, field.timePortGuid);
-      node.graphNode.RegisterPort(field.outputPort, field.outputPortGuid);
-      fields.Add(field);
-      this.Add(field);
 
-      field.OnRemove = () => {
-        fields.Remove(field);
-        node.graphNode.UnregisterPort(field.timePort);
-        node.graphNode.UnregisterPort(field.outputPort);
-        field.RemoveFromHierarchy();
+  public class Field : VisualElement {
+    public Port actionPort;
+    public string actionPortGuid;
+    public Port outputPort;
+    public string outputPortGuid;
+    public Action OnRemove;
+    public Field(SequenceNode node, SerializableSequenceNode.Field serializable) {
+      this.style.flexDirection = FlexDirection.Row;
+
+      actionPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(Proceed));
+      this.actionPortGuid = serializable.actionPortGuid;
+      node.graphNode.RegisterPort(actionPort, actionPortGuid);
+
+      outputPort = ProcessPort.CreateOutput();
+      this.outputPortGuid = serializable.outputPortGuid;
+      node.graphNode.RegisterPort(outputPort, outputPortGuid);
+
+      OnRemove += () => {
+        actionPort.RemoveFromHierarchy();
+        outputPort.RemoveFromHierarchy();
+        node.graphNode.UnregisterPort(actionPort);
+        node.graphNode.UnregisterPort(outputPort);
       };
+
+      var deleteButton = new Button(() => OnRemove());
+      deleteButton.text = "X";
+
+      this.Add(actionPort);
+      this.Add(deleteButton);
+      this.Add(outputPort);
     }
 
-    public void AddField(PropertyTransitionInput field) {
-      node.graphNode.RegisterPort(field.propertyCurvePort, field.propertyCurvePortGuid);
-      fields.Add(field);
-      this.Add(field);
-
-      field.OnRemove = () => {
-        fields.Remove(field);
-        node.graphNode.UnregisterPort(field.propertyCurvePort);
-        field.RemoveFromHierarchy();
-      };
-    }
-
-    public void Proceed(ProcessParameter process) {
-      foreach (var field in fields) {
-        if (field is TimeField timeField) {
-          if (timeField.timePort.connected) {
-            process.time += CalculatePort.GetCalculatedValue<float>(timeField.timePort);
-          } else {
-            process.time += timeField.time.value;
-          }
-          process.constructor.TSet(process.time);
-          ProcessPort.Proceed(process, timeField.outputPort);
-        }
-        if (field is PropertyTransitionInput propertyTransitionInput) {
-          if (propertyTransitionInput.propertyCurvePort.connected) {
-            var propertyTransition = CalculatePort.GetCalculatedValue<PropertyTransition>(propertyTransitionInput.propertyCurvePort);
-            var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(
-              propertyTransition.property.gameObject.transform,
-              propertyTransition.property.type,
-              propertyTransition.property.propertyName);
-            process.constructor.Add(property, propertyTransition.targetValue, propertyTransition.curve);
-          }
-        }
-      }
+    public ProcessParameter Proceed(ProcessParameter p) {
+      var action = CalculatePort.GetCalculatedValue<Proceed>(actionPort);
+      if (action != null) p = action(p);
+      ProcessPort.Proceed(p, outputPort);
+      return p;
     }
   }
-  public SequenceField sequenceField;
+
+  public class Fields : VisualElement {
+    SequenceNode node;
+    public List<Field> fields = new List<Field>();
+    public Fields(SequenceNode node) {
+      this.node = node;
+    }
+
+    public void AddField(SerializableSequenceNode.Field serializable) {
+      var field = new Field(node, serializable);
+      fields.Add(field);
+      this.Add(field);
+
+      field.OnRemove = () => {
+        field.RemoveFromHierarchy();
+        fields.Remove(field);
+      };
+    }
+    
+    public ProcessParameter Proceed(ProcessParameter p) {
+      foreach (var field in fields) {
+        p = field.Proceed(p);
+      }
+      return p;
+    }
+  }
+
+  public Fields fields;
 
   void Construct(SerializableSequenceNode serializable) {
     this.title = "Sequence";
@@ -164,30 +127,21 @@ public class SequenceNode : Node, IGraphNode {
     graphNode.RegisterPort(inputPort, serializable.inputPortGuid);
     this.inputContainer.Add(inputPort);
 
-    sequenceField = new SequenceField(this);
-    this.mainContainer.Add(sequenceField);
+    this.fields = new Fields(this);
+    this.mainContainer.Add(this.fields);
 
-    foreach(var serializableSequenceField in serializable.fields) {
-      if (serializableSequenceField.type == SerializableSequenceNode.FieldType.Time) {
-        sequenceField.AddField(new SequenceField.TimeField(serializableSequenceField));
-      } if (serializableSequenceField.type == SerializableSequenceNode.FieldType.PropertyTransition) {
-        sequenceField.AddField(new SequenceField.PropertyTransitionInput(serializableSequenceField));
-      }
+    foreach (var sField in serializable.fields) {
+      this.fields.AddField(sField);
     }
 
-    var propertyCurveButton = new Button(() => {
-      sequenceField.AddField(new SequenceField.PropertyTransitionInput(new SerializableSequenceNode.Field(SerializableSequenceNode.FieldType.PropertyTransition)));
+    var addFieldButton = new Button(() => {
+      this.fields.AddField(new SerializableSequenceNode.Field());
     });
-    propertyCurveButton.text = "Add PropertyCurve";
-    var timeButton = new Button(() => {
-      sequenceField.AddField(new SequenceField.TimeField(new SerializableSequenceNode.Field(SerializableSequenceNode.FieldType.Time)));
-    });
-    timeButton.text = "Add Time";
-    this.mainContainer.Add(propertyCurveButton);
-    this.mainContainer.Add(timeButton);
+
+    this.mainContainer.Add(addFieldButton);
 
     inputPort.SetProceed(p => {
-      sequenceField.Proceed(p);
+      return fields.Proceed(p);
     });
   }
 
@@ -199,12 +153,12 @@ public class SequenceNode : Node, IGraphNode {
   public SequenceNode() {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     var serializable = new SerializableSequenceNode();
-    serializable.fields.Add(new SerializableSequenceNode.Field(SerializableSequenceNode.FieldType.Time));
+    serializable.fields.Add(new SerializableSequenceNode.Field());
     this.Construct(serializable);
   }
 
   // Load
-  public SequenceNode(GraphView graphView, SerializableSequenceNode serializable) {
+  public SequenceNode(AnimationGraphView graphView, SerializableSequenceNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(this.graphNode as GraphNodeLogic);
     this.Construct(serializable);

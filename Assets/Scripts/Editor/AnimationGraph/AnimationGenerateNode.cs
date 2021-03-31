@@ -76,7 +76,7 @@ public class AnimationGenerateNode : Node, IGraphNode {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     this.Construct(new SerializableAnimationGenerateNode());
   }
-  public AnimationGenerateNode(GraphView graphView, SerializableAnimationGenerateNode serializable) {
+  public AnimationGenerateNode(AnimationGraphView graphView, SerializableAnimationGenerateNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

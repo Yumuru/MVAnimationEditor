@@ -34,12 +34,6 @@ public class SerializablePropertyTransitionNode {
   }
 }
 
-public struct PropertyTransition {
-  public PropertyData property;
-  public float targetValue;
-  public AnimationCurve curve;
-}
-
 public class PropertyTransitionNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public CurveField curveField { get; private set; }
@@ -80,12 +74,13 @@ public class PropertyTransitionNode : Node, IGraphNode {
     this.mainContainer.Add(curveElement);
 
     this.outputPortGuid = serializable.outputPortGuid;
-    var outputPort = CalculatePort.CreateOutput<PropertyTransition>();
+    var outputPort = CalculatePort.CreateOutput<Proceed>();
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.SetCalculate<PropertyTransition>(() => {
-      var property = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
+    outputPort.source = new SequenceActionParameter(false, () => {
+      var propertyData = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
+      var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(propertyData.gameObject.transform, propertyData.type, propertyData.propertyName);
       float targetValue;
       if (targetValuePort.connected) {
         targetValue = CalculatePort.GetCalculatedValue<float>(targetValuePort);
@@ -96,8 +91,10 @@ public class PropertyTransitionNode : Node, IGraphNode {
       } else {
         curve = curveField.value;
       }
-      return new PropertyTransition()
-        { property = property, targetValue = targetValue, curve = curve };
+      return p => {
+        p.constructor.Add(property, targetValue, curve);
+        return p;
+      };
     });
   }
   
@@ -105,7 +102,7 @@ public class PropertyTransitionNode : Node, IGraphNode {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     this.Construct(new SerializablePropertyTransitionNode());
   }
-  public PropertyTransitionNode(GraphView graphView, SerializablePropertyTransitionNode serializable) {
+  public PropertyTransitionNode(AnimationGraphView graphView, SerializablePropertyTransitionNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

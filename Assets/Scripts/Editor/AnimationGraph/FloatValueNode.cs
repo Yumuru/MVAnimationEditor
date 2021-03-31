@@ -41,7 +41,7 @@ public class FloatValueNode : Node, IGraphNode {
     valueField.value = serializable.value;
     this.mainContainer.Add(valueField);
     
-    outputPort.SetCalculate<float>(() => valueField.value);
+    outputPort.source = new PortObject<float>(() => valueField.value);
   }
   
   void SaveAsset(GraphAsset asset) {
@@ -55,7 +55,7 @@ public class FloatValueNode : Node, IGraphNode {
   }
   
   // Load
-  public FloatValueNode(GraphView graphView, SerializableFloatValueNode serializable) {
+  public FloatValueNode(AnimationGraphView graphView, SerializableFloatValueNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(this.graphNode as GraphNodeLogic);
     this.Construct(serializable);

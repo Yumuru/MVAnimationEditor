@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
+
 namespace AnimationGraph {
 [Serializable]
 public class SerializableTestNode {
@@ -19,6 +20,7 @@ public class SerializableTestNode {
 }
 public class TestNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
+  public Label label;
   public string inputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
@@ -31,10 +33,13 @@ public class TestNode : Node, IGraphNode {
     graphNode.RegisterPort(inputPort, serializable.inputPortGuid);
     this.inputPortGuid = serializable.inputPortGuid;
     this.inputContainer.Add(inputPort);
-    this.outputContainer.RemoveFromHierarchy();
+
+    label = new Label();
+    this.mainContainer.Add(label);
 
     inputPort.SetProceed(p => {
       Debug.Log(p.time);
+      return p;
     });
   }
 
@@ -43,7 +48,7 @@ public class TestNode : Node, IGraphNode {
     Construct(new SerializableTestNode());
   }
 
-  public TestNode(GraphView graphView, SerializableTestNode serializable) {
+  public TestNode(AnimationGraphView graphView, SerializableTestNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     Construct(serializable);

@@ -44,7 +44,7 @@ public class CurveNode : Node, IGraphNode {
     this.curveField = new CurveField();
     curveField.value = serializable.curve;
 
-    outputPort.SetCalculate<AnimationCurve>(() => this.curveField.value);
+    outputPort.source = new PortObject<AnimationCurve>(() => this.curveField.value);
 
     this.mainContainer.Add(curveField);
   }
@@ -53,7 +53,7 @@ public class CurveNode : Node, IGraphNode {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     this.Construct(new SerializableCurveNode());
   }
-  public CurveNode(GraphView graphView, SerializableCurveNode serializable) {
+  public CurveNode(AnimationGraphView graphView, SerializableCurveNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

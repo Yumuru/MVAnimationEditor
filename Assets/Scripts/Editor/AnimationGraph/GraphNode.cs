@@ -24,13 +24,13 @@ public interface IGraphNodeLogic {
   Dictionary<string, Port> guidPorts { get; }
   Func<Port, Port, bool> isCompatible { get; set; }
   Action<GraphAsset> SaveAsset { get; }
-  void Initialize(GraphView graphView);
+  void Initialize(AnimationGraphView graphView);
   void RegisterPort(Port port, string guid);
   void UnregisterPort(Port port);
 }
 public class GraphNodeLogic : IGraphNodeLogic {
   public Node node { get; private set; }
-  public GraphView graphView { get; private set; }
+  public AnimationGraphView graphView { get; private set; }
   public Dictionary<Port, string> portGuids { get; } = new Dictionary<Port, string>();
   public Dictionary<string, Port> guidPorts { get; }= new Dictionary<string, Port>();
   public Action<GraphAsset> SaveAsset { get; private set; }
@@ -44,14 +44,14 @@ public class GraphNodeLogic : IGraphNodeLogic {
       }
     });
   }
-  public void Initialize(GraphView graphView) {
+  public void Initialize(AnimationGraphView graphView) {
     this.graphView = graphView;
   }
   public GraphNodeLogic(Node node, Action<GraphAsset> saveAsset) {
     this.Construct(node);
     this.SaveAsset = saveAsset;
   }
-  public GraphNodeLogic(Node node, GraphView animationGraphView, Action<GraphAsset> saveAsset) {
+  public GraphNodeLogic(Node node, AnimationGraphView animationGraphView, Action<GraphAsset> saveAsset) {
     this.Construct(node);
     this.graphView = animationGraphView;
     this.SaveAsset = saveAsset;

@@ -7,11 +7,11 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
-public class GraphView : UnityEditor.Experimental.GraphView.GraphView {
+public class AnimationGraphView : UnityEditor.Experimental.GraphView.GraphView {
   public AnimationGraphWindow window { get; set; }
   public GraphAsset graphAsset { get; set; }
 
-  public GraphView(AnimationGraphWindow window, GraphAsset asset) : base() {
+  public AnimationGraphView(AnimationGraphWindow window, GraphAsset asset) : base() {
     this.window = window;
     this.graphAsset = asset;
     SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);

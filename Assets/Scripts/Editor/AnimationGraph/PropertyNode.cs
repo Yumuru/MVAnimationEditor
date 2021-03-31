@@ -78,7 +78,7 @@ public class PropertyNode : Node, IGraphNode {
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.SetCalculate<PropertyData>(() => {
+    outputPort.source = new PortObject<PropertyData>(() => {
       var gameObject = CalculatePort.GetCalculatedValue<GameObject>(gameObjectPort);
       return new PropertyData() {
         gameObject = gameObject,
@@ -96,7 +96,7 @@ public class PropertyNode : Node, IGraphNode {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     this.Construct(new SerializablePropertyNode());
   }
-  public PropertyNode(GraphView graphView, SerializablePropertyNode serializable) {
+  public PropertyNode(AnimationGraphView graphView, SerializablePropertyNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

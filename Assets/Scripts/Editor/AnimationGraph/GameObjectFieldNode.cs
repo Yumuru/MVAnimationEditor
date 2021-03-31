@@ -48,7 +48,7 @@ public class GameObjectFieldNode : Node, IGraphNode {
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.SetCalculate<GameObject>(() => { return gameObjectField.value as GameObject; });
+    outputPort.source = new PortObject<GameObject>(() => { return gameObjectField.value as GameObject; });
 
     this.mainContainer.Add(gameObjectField);
   }
@@ -57,7 +57,7 @@ public class GameObjectFieldNode : Node, IGraphNode {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     this.Construct(new SerializableGameObjectFieldNode());
   }
-  public GameObjectFieldNode(GraphView graphView, SerializableGameObjectFieldNode serializable) {
+  public GameObjectFieldNode(AnimationGraphView graphView, SerializableGameObjectFieldNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

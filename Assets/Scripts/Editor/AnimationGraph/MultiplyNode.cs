@@ -40,7 +40,7 @@ public class MultiplyNode : Node, IGraphNode {
       return input.portType == typeof(float);
     };
 
-    outputPort.SetCalculate<float>(() => {
+    outputPort.source = new PortObject<float>(() => {
       var value = 1f;
       foreach (var field in calculateField.fields) {
         if (field.inputPort.connected) {
@@ -67,7 +67,7 @@ public class MultiplyNode : Node, IGraphNode {
   }
   
   // Load
-  public MultiplyNode(GraphView graphView, SerializableMultiplyNode serializable) {
+  public MultiplyNode(AnimationGraphView graphView, SerializableMultiplyNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(this.graphNode as GraphNodeLogic);
     this.Construct(serializable);

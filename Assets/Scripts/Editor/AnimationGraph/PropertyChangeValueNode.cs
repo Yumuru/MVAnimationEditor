@@ -8,14 +8,14 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 [Serializable]
-public class SerializablePropertyChangeValueNode {
+public class SerializablePropertyValueChangeNode {
   public SerializableGraphNode graphNode;
   public string propretyPortGuid;
   public string targetValuePortGuid;
   public string curvePortGuid;
   public string outputPortGuid;
   public AnimationCurve curve;
-  public SerializablePropertyChangeValueNode() {
+  public SerializablePropertyValueChangeNode() {
     this.propretyPortGuid = Guid.NewGuid().ToString();
     this.targetValuePortGuid = Guid.NewGuid().ToString();
     this.curvePortGuid = Guid.NewGuid().ToString();
@@ -24,13 +24,12 @@ public class SerializablePropertyChangeValueNode {
     curve.AddKey(0f, 0f);
     curve.AddKey(1f, 1f);
   }
-  public SerializablePropertyChangeValueNode(PropertyChangeValueNode node) {
+  public SerializablePropertyValueChangeNode(PropertyValueChangeNode node) {
     this.graphNode = new SerializableGraphNode(node.graphNode);
     this.propretyPortGuid = node.propertyPortGuid;
     this.targetValuePortGuid = node.targetValuePortGuid;
     this.curvePortGuid = node.curvePortGuid;
     this.outputPortGuid = node.outputPortGuid;
-    this.curve = node.curveField.value;
   }
 }
 
@@ -39,53 +38,55 @@ public struct PropertyChangeValue {
   public float targetValue;
 }
 
-public class PropertyChangeValueNode : Node, IGraphNode {
+public class PropertyValueChangeNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public CurveField curveField { get; private set; }
   public string propertyPortGuid;
   public string curvePortGuid;
   public string targetValuePortGuid;
   public string outputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
-    asset.propertyChangeValueNodes.Add(new SerializablePropertyChangeValueNode(this));
+    asset.propertyValueChangeNodes.Add(new SerializablePropertyValueChangeNode(this));
   }
 
-  void Construct(SerializablePropertyChangeValueNode serializable) {
-    this.title = "Property Value Change";
+  void Construct(SerializablePropertyValueChangeNode serializable) {
+    this.title = "Property Change Value";
 
     this.propertyPortGuid = serializable.propretyPortGuid;
     var propertyPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PropertyData));
     this.graphNode.RegisterPort(propertyPort, propertyPortGuid);
     this.inputContainer.Add(propertyPort);
 
-    var targetValuePort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
+    var targetValuePort = CalculatePort.CreateInput<float>();
     this.targetValuePortGuid = serializable.targetValuePortGuid;
     targetValuePort.portName = "Target Value";
     this.graphNode.RegisterPort(targetValuePort, targetValuePortGuid);
     this.inputContainer.Add(targetValuePort);
 
-    var outputPort = CalculatePort.CreateOutput<PropertyChangeValue>();
+    var outputPort = CalculatePort.CreateOutput<Proceed>();
     this.outputPortGuid = serializable.outputPortGuid;
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.SetCalculate<PropertyChangeValue>(() => {
-      var property = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
+    outputPort.source = new PortObject<Proceed>(() => {
+      var propertyData = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
+      var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(propertyData.gameObject.transform, propertyData.type, propertyData.propertyName);
       float targetValue;
       if (targetValuePort.connected) {
         targetValue = CalculatePort.GetCalculatedValue<float>(targetValuePort);
       } else return default;
-      return new PropertyChangeValue()
-        { property = property, targetValue = targetValue };
+      return p => {
+        p.constructor.AddImmediate(property, targetValue);
+        return p;
+      };
     });
   }
   
-  public PropertyChangeValueNode() {
+  public PropertyValueChangeNode() {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
-    this.Construct(new SerializablePropertyChangeValueNode());
+    this.Construct(new SerializablePropertyValueChangeNode());
   }
-  public PropertyChangeValueNode(GraphView graphView, SerializablePropertyChangeValueNode serializable) {
+  public PropertyValueChangeNode(AnimationGraphView graphView, SerializablePropertyValueChangeNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

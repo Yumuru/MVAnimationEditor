@@ -47,16 +47,16 @@ public class GraphAsset : ScriptableObject {
   public List<SerializablePropertyNode> propertyNodes = new List<SerializablePropertyNode>();
   public List<SerializablePropertyTransitionNode> propertyTransitionNodes = new List<SerializablePropertyTransitionNode>();
   public List<SerializableSequenceNode> sequenceNodes = new List<SerializableSequenceNode>();
-  public List<SerializableNewSequenceNode> newSequenceNodes = new List<SerializableNewSequenceNode>();
+  public List<SerializableForloopNode> forloopNodes = new List<SerializableForloopNode>();
   public List<SerializableTimeNode> timeNodes = new List<SerializableTimeNode>();
-  public List<SerializablePropertyChangeValueNode> propertyChangeValueNodes = new List<SerializablePropertyChangeValueNode>();
+  public List<SerializablePropertyValueChangeNode> propertyValueChangeNodes = new List<SerializablePropertyValueChangeNode>();
   public List<SerializableTestNode> testNodes = new List<SerializableTestNode>();
   public List<SerializableFloatValueNode> floatValueNodes = new List<SerializableFloatValueNode>();
   public List<SerializableFloatListNode> floatListNodes = new List<SerializableFloatListNode>();
   public List<SerializableCurveNode> curveNodes = new List<SerializableCurveNode>();
   public List<SerializableMultiplyNode> multiplyNodes = new List<SerializableMultiplyNode>();
   public List<SerializableEdge> edges = new List<SerializableEdge>();
-  public void SaveAsset(GraphView graphView) {
+  public void SaveAsset(AnimationGraphView graphView) {
     viewPosition = graphView.viewTransform.position;
     viewScale = graphView.viewTransform.scale;
 
@@ -65,9 +65,9 @@ public class GraphAsset : ScriptableObject {
     propertyNodes.Clear();
     propertyTransitionNodes.Clear();
     sequenceNodes.Clear();
-    newSequenceNodes.Clear();
+    forloopNodes.Clear();
     timeNodes.Clear();
-    propertyChangeValueNodes.Clear();
+    propertyValueChangeNodes.Clear();
     testNodes.Clear();
     floatValueNodes.Clear();
     floatListNodes.Clear();
@@ -96,7 +96,7 @@ public class GraphAsset : ScriptableObject {
     EditorUtility.SetDirty(this);
     AssetDatabase.SaveAssets();
   }
-  public void LoadAsset(GraphView graphView) {
+  public void LoadAsset(AnimationGraphView graphView) {
     graphView.viewTransform.position = viewPosition;
     graphView.viewTransform.scale = viewScale;
 
@@ -110,12 +110,12 @@ public class GraphAsset : ScriptableObject {
       graphView.AddElement(new PropertyTransitionNode(graphView, serializable)); }
     foreach (var serializable in sequenceNodes) {
       graphView.AddElement(new SequenceNode(graphView, serializable)); }
-    foreach (var serializable in newSequenceNodes) {
-      graphView.AddElement(new NewSequenceNode(graphView, serializable)); }
+    foreach (var serializable in forloopNodes) {
+      graphView.AddElement(new ForloopNode(graphView, serializable)); }
     foreach (var serializable in timeNodes) {
       graphView.AddElement(new TimeNode(graphView, serializable)); }
-    foreach (var serializable in propertyChangeValueNodes) {
-      graphView.AddElement(new PropertyChangeValueNode(graphView, serializable)); }
+    foreach (var serializable in propertyValueChangeNodes) {
+      graphView.AddElement(new PropertyValueChangeNode(graphView, serializable)); }
     foreach (var serializable in testNodes) {
       graphView.AddElement(new TestNode(graphView, serializable)); }
     foreach (var serializable in floatValueNodes) {
