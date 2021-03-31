@@ -39,7 +39,7 @@ public class AnimationGenerateNode : Node, IGraphNode {
   void Construct(SerializableAnimationGenerateNode serializable) {
     this.title = "AnimationGenerate";
     this.inputContainer.RemoveFromHierarchy();
-    var outputPort = ProcessPort.CreateOutput();
+    var outputPort = EventPort.CreateOutput();
     this.outputPortGuid = serializable.outputPortGuid;
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
@@ -63,7 +63,7 @@ public class AnimationGenerateNode : Node, IGraphNode {
         animationClipField.value as AnimationClip);
       constructor.clip.ClearCurves();
       constructor.Construct(c => {
-        ProcessPort.Proceed(new ProcessParameter() {
+        EventPort.Proceed(new ProcessParameter() {
           constructor = c,
           time = 0f,
           clip = animationClipField.value as AnimationClip,

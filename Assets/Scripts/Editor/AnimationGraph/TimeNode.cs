@@ -44,13 +44,13 @@ public class TimeNode : Node, IGraphNode {
     this.inputContainer.Add(timePort);
 
     foreach (var instanceActionPortGuid in serializable.instanceActionPortGuids) {
-      var instanceActionPort = CalculatePort.CreateInput<Proceed>();
+      var instanceActionPort = CalculatePort.CreateInput<Process>();
       graphNode.RegisterPort(instanceActionPort, instanceActionPortGuid);
       instanceActionPortGuids.Add(instanceActionPortGuid);
       this.inputContainer.Add(instanceActionPort);
     }
     var button = new Button(() => {
-      var instanceActionPort = CalculatePort.CreateInput<Proceed>();
+      var instanceActionPort = CalculatePort.CreateInput<Process>();
       var instanceActionPortGuid = Guid.NewGuid().ToString();
       graphNode.RegisterPort(instanceActionPort, instanceActionPortGuid);
       instanceActionPortGuids.Add(instanceActionPortGuid);
@@ -59,17 +59,17 @@ public class TimeNode : Node, IGraphNode {
     button.text = "Add";
     this.mainContainer.Add(button);
 
-    var outputPort = CalculatePort.CreateOutput<Proceed>();
+    var outputPort = CalculatePort.CreateOutput<Process>();
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
     outputPort.source = new SequenceActionParameter(true, () => {
       return p => {
-        p.time += CalculatePort.GetCalculatedValue<float>(timePort);
+        p.time += (float) CalculatePort.GetCalculatedValue(timePort);
         p.constructor.TSet(p.time);
         foreach (var instanceActionPort in this.inputContainer.Children().Skip(1).Cast<Port>()) {
-          var action = CalculatePort.GetCalculatedValue<Proceed>(instanceActionPort);
+          var action = CalculatePort.GetCalculatedValue(instanceActionPort) as Process;
           p = action(p);
         }
         return p;

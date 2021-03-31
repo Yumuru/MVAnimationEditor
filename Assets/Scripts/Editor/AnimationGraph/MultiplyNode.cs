@@ -35,16 +35,11 @@ public class MultiplyNode : Node, IGraphNode {
     graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    this.graphNode.isCompatible = (input, output) => {
-      if (calculateField.isVectorOrMatrix(input.portType)) return !calculateField.isContainVectorOrMatrixInput;
-      return input.portType == typeof(float);
-    };
-
     outputPort.source = new PortObject<float>(() => {
       var value = 1f;
       foreach (var field in calculateField.fields) {
         if (field.inputPort.connected) {
-          value *= CalculatePort.GetCalculatedValue<float>(field.inputPort);
+          value *= CalculatePort.GetCalculatedValue(field.inputPort).CastInt();
         } else {
           value *= field.valueField.value;
         }

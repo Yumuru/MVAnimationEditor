@@ -50,15 +50,21 @@ public class GraphAsset : ScriptableObject {
   public List<SerializableForloopNode> forloopNodes = new List<SerializableForloopNode>();
   public List<SerializableTimeNode> timeNodes = new List<SerializableTimeNode>();
   public List<SerializablePropertyValueChangeNode> propertyValueChangeNodes = new List<SerializablePropertyValueChangeNode>();
+  public List<SerializablePropertyCurveChangeNode> propertyCurveChangeNodes = new List<SerializablePropertyCurveChangeNode>();
   public List<SerializableTestNode> testNodes = new List<SerializableTestNode>();
   public List<SerializableFloatValueNode> floatValueNodes = new List<SerializableFloatValueNode>();
   public List<SerializableFloatListNode> floatListNodes = new List<SerializableFloatListNode>();
+  public List<SerializableGameObjectListNode> gameObjectListNodes = new List<SerializableGameObjectListNode>();
+  public List<SerializableListSelectNode> listSelectNodes = new List<SerializableListSelectNode>();
+  public List<SerializableChildrenNode> childrenNodes = new List<SerializableChildrenNode>();
   public List<SerializableCurveNode> curveNodes = new List<SerializableCurveNode>();
   public List<SerializableMultiplyNode> multiplyNodes = new List<SerializableMultiplyNode>();
   public List<SerializableEdge> edges = new List<SerializableEdge>();
+  public GameObject gameObject;
   public void SaveAsset(AnimationGraphView graphView) {
     viewPosition = graphView.viewTransform.position;
     viewScale = graphView.viewTransform.scale;
+    gameObject = new GameObject();
 
     animationGenerateNodes.Clear();
     gameObjectFieldNodes.Clear();
@@ -68,9 +74,13 @@ public class GraphAsset : ScriptableObject {
     forloopNodes.Clear();
     timeNodes.Clear();
     propertyValueChangeNodes.Clear();
+    propertyCurveChangeNodes.Clear();
     testNodes.Clear();
     floatValueNodes.Clear();
     floatListNodes.Clear();
+    gameObjectListNodes.Clear();
+    listSelectNodes.Clear();
+    childrenNodes.Clear();
     curveNodes.Clear();
     multiplyNodes.Clear();
     edges.Clear();
@@ -116,12 +126,20 @@ public class GraphAsset : ScriptableObject {
       graphView.AddElement(new TimeNode(graphView, serializable)); }
     foreach (var serializable in propertyValueChangeNodes) {
       graphView.AddElement(new PropertyValueChangeNode(graphView, serializable)); }
+    foreach (var serializable in propertyCurveChangeNodes) {
+      graphView.AddElement(new PropertyCurveChangeNode(graphView, serializable)); }
     foreach (var serializable in testNodes) {
       graphView.AddElement(new TestNode(graphView, serializable)); }
     foreach (var serializable in floatValueNodes) {
       graphView.AddElement(new FloatValueNode(graphView, serializable)); }
     foreach (var serializable in floatListNodes) {
       graphView.AddElement(new FloatListNode(graphView, serializable)); }
+    foreach (var serializable in gameObjectListNodes) {
+      graphView.AddElement(new GameObjectListNode(graphView, serializable)); }
+    foreach (var serializable in listSelectNodes) {
+      graphView.AddElement(new ListSelectNode(graphView, serializable)); }
+    foreach (var serializable in childrenNodes) {
+      graphView.AddElement(new ChildrenNode(graphView, serializable)); }
     foreach (var serializable in curveNodes) {
       graphView.AddElement(new CurveNode(graphView, serializable)); }
     foreach (var serializable in multiplyNodes) {

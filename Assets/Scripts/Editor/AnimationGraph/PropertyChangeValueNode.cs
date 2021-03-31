@@ -63,17 +63,17 @@ public class PropertyValueChangeNode : Node, IGraphNode {
     this.graphNode.RegisterPort(targetValuePort, targetValuePortGuid);
     this.inputContainer.Add(targetValuePort);
 
-    var outputPort = CalculatePort.CreateOutput<Proceed>();
+    var outputPort = CalculatePort.CreateOutput<Process>();
     this.outputPortGuid = serializable.outputPortGuid;
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.source = new PortObject<Proceed>(() => {
-      var propertyData = CalculatePort.GetCalculatedValue<PropertyData>(propertyPort);
+    outputPort.source = new PortObject<Process>(() => {
+      var propertyData = (PropertyData) CalculatePort.GetCalculatedValue(propertyPort);
       var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(propertyData.gameObject.transform, propertyData.type, propertyData.propertyName);
       float targetValue;
       if (targetValuePort.connected) {
-        targetValue = CalculatePort.GetCalculatedValue<float>(targetValuePort);
+        targetValue = (float) CalculatePort.GetCalculatedValue(targetValuePort);
       } else return default;
       return p => {
         p.constructor.AddImmediate(property, targetValue);

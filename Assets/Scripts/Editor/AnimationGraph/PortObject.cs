@@ -12,14 +12,14 @@ public class EdgeConnectCallback : IEdgeConnectCallback {
     this.OnConnected = OnConnected;
   }
 }
-public interface IPortObject<T> {
-  Func<T> getter { get; }
+public interface IPortObject {
+  Func<object> getter { get; }
 }
-public class PortObject<T> : IPortObject<T> {
-  public Func<T> getter { get; private set; }
+public class PortObject<T> : IPortObject {
+  public Func<object> getter { get; private set; }
 
   public PortObject(Func<T> getter) {
-    this.getter = getter;
+    this.getter = () => getter();
   }
 }
 }

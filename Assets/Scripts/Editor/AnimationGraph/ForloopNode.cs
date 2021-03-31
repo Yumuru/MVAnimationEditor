@@ -42,16 +42,16 @@ public class ForloopNode : Node, IGraphNode {
   void Construct(SerializableForloopNode serializable) {
     this.title = "For loop";
 
-    var inputPort = ProcessPort.CreateInput();
+    var inputPort = EventPort.CreateInput();
     this.inputPortGuid = serializable.inputPortGuid;
     graphNode.RegisterPort(inputPort, inputPortGuid);
 
-    var outputPort = ProcessPort.CreateOutput();
+    var outputPort = EventPort.CreateOutput();
     outputPort.portName = "Exit";
     this.outputPortGuid = serializable.outputPortGuid;
     graphNode.RegisterPort(outputPort, outputPortGuid);
 
-    var bodyPort = ProcessPort.CreateOutput();
+    var bodyPort = EventPort.CreateOutput();
     bodyPort.portName = "Body";
     this.bodyPortGuid = serializable.bodyPortGuid;
     graphNode.RegisterPort(bodyPort, bodyPortGuid);
@@ -60,24 +60,25 @@ public class ForloopNode : Node, IGraphNode {
     this.outputContainer.Add(outputPort);
     this.outputContainer.Add(bodyPort);
 
-    var iterateCountPort = CalculatePort.CreateOutput<float>();
+    var iterateCountPort = CalculatePort.CreateOutput<int>();
     this.iterateCountPortGuid = serializable.iterateCountPortGuid;
     graphNode.RegisterPort(iterateCountPort, iterateCountPortGuid);
+    iterateCountPort.portName = "Count";
     this.outputContainer.Add(iterateCountPort);
     var iterateCount = 0;
-    iterateCountPort.source = new PortObject<float>(() => iterateCount);
+    iterateCountPort.source = new PortObject<int>(() => iterateCount);
 
     loopNum = new IntegerField();
     loopNum.label = "Loop Num";
     loopNum.value = serializable.loopnum;
     this.mainContainer.Add(loopNum);
 
-    inputPort.SetProceed(p => {
+    inputPort.NewEvent(p => {
       for (int i = 0; i < loopNum.value; i++) {
         iterateCount = i;
-        p = ProcessPort.Proceed(p, bodyPort);
+        p = EventPort.Proceed(p, bodyPort);
       }
-      ProcessPort.Proceed(p, outputPort);
+      EventPort.Proceed(p, outputPort);
       return p;
     });
   }

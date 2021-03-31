@@ -29,7 +29,7 @@ public class TestNode : Node, IGraphNode {
 
   void Construct(SerializableTestNode serializable) {
     this.title = "Test Node (-ω-)";
-    var inputPort = ProcessPort.CreateInput();
+    var inputPort = EventPort.CreateInput();
     graphNode.RegisterPort(inputPort, serializable.inputPortGuid);
     this.inputPortGuid = serializable.inputPortGuid;
     this.inputContainer.Add(inputPort);
@@ -37,7 +37,7 @@ public class TestNode : Node, IGraphNode {
     label = new Label();
     this.mainContainer.Add(label);
 
-    inputPort.SetProceed(p => {
+    inputPort.NewEvent(p => {
       Debug.Log(p.time);
       return p;
     });

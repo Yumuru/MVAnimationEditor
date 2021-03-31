@@ -8,58 +8,77 @@ using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
 [Serializable]
-public class SerializablePropertyTransitionNode {
+public class SerializablePropertyCurveChangeNode {
   public SerializableGraphNode graphNode;
   public string propretyPortGuid;
-  public string targetValuePortGuid;
+  public string timePortGuid;
+  public string minValuePortGuid;
+  public string maxValuePortGuid;
   public string curvePortGuid;
   public string outputPortGuid;
   public AnimationCurve curve;
-  public SerializablePropertyTransitionNode() {
+  public SerializablePropertyCurveChangeNode() {
     this.propretyPortGuid = Guid.NewGuid().ToString();
-    this.targetValuePortGuid = Guid.NewGuid().ToString();
+    this.timePortGuid = Guid.NewGuid().ToString();
+    this.minValuePortGuid = Guid.NewGuid().ToString();
+    this.maxValuePortGuid = Guid.NewGuid().ToString();
     this.curvePortGuid = Guid.NewGuid().ToString();
     this.outputPortGuid = Guid.NewGuid().ToString();
     this.curve = new AnimationCurve();
     curve.AddKey(0f, 0f);
     curve.AddKey(1f, 1f);
   }
-  public SerializablePropertyTransitionNode(PropertyTransitionNode node) {
+  public SerializablePropertyCurveChangeNode(PropertyCurveChangeNode node) {
     this.graphNode = new SerializableGraphNode(node.graphNode);
     this.propretyPortGuid = node.propertyPortGuid;
-    this.targetValuePortGuid = node.targetValuePortGuid;
+    this.timePortGuid = node.timePortGuid;
+    this.minValuePortGuid = node.minValuePortGuid;
+    this.maxValuePortGuid = node.maxValuePortGuid;
     this.curvePortGuid = node.curvePortGuid;
     this.outputPortGuid = node.outputPortGuid;
     this.curve = node.curveField.value;
   }
 }
 
-public class PropertyTransitionNode : Node, IGraphNode {
+public class PropertyCurveChangeNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
   public CurveField curveField { get; private set; }
   public string propertyPortGuid;
+  public string timePortGuid;
+  public string maxValuePortGuid;
+  public string minValuePortGuid;
   public string curvePortGuid;
-  public string targetValuePortGuid;
   public string outputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
-    asset.propertyTransitionNodes.Add(new SerializablePropertyTransitionNode(this));
+    asset.propertyCurveChangeNodes.Add(new SerializablePropertyCurveChangeNode(this));
   }
 
-  void Construct(SerializablePropertyTransitionNode serializable) {
-    this.title = "Property Transition";
+  void Construct(SerializablePropertyCurveChangeNode serializable) {
+    this.title = "Property Curve Change";
 
     this.propertyPortGuid = serializable.propretyPortGuid;
-    var propertyPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(PropertyData));
+    var propertyPort = CalculatePort.CreateInput<PropertyData>();
     this.graphNode.RegisterPort(propertyPort, propertyPortGuid);
     this.inputContainer.Add(propertyPort);
 
-    this.targetValuePortGuid = serializable.targetValuePortGuid;
-    var targetValuePort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
-    targetValuePort.portName = "Traget Value";
-    this.graphNode.RegisterPort(targetValuePort, targetValuePortGuid);
-    //targetValueField.label = "Target Value";
-    this.mainContainer.Add(targetValuePort);
+    var timePort = CalculatePort.CreateInput<float>();
+    this.timePortGuid = serializable.timePortGuid;
+    timePort.portName = "Time";
+    this.graphNode.RegisterPort(timePort, timePortGuid);
+    this.inputContainer.Add(timePort);
+
+    var minValuePort = CalculatePort.CreateInput<float>();
+    this.minValuePortGuid = serializable.minValuePortGuid;
+    minValuePort.portName = "Min Value";
+    this.graphNode.RegisterPort(minValuePort, minValuePortGuid);
+    this.inputContainer.Add(minValuePort);
+
+    var maxValuePort = CalculatePort.CreateInput<float>();
+    this.maxValuePortGuid = serializable.maxValuePortGuid;
+    maxValuePort.portName = "Max Value";
+    this.graphNode.RegisterPort(maxValuePort, maxValuePortGuid);
+    this.inputContainer.Add(maxValuePort);
 
     var curveElement = new VisualElement();
     curveElement.style.flexDirection = FlexDirection.Row;
@@ -81,10 +100,16 @@ public class PropertyTransitionNode : Node, IGraphNode {
     outputPort.source = new SequenceActionParameter(false, () => {
       var propertyData = (PropertyData) CalculatePort.GetCalculatedValue(propertyPort);
       var property = new Yumuru.AnimationConstructor.FloatPropertyInfo(propertyData.gameObject.transform, propertyData.type, propertyData.propertyName);
+      var time = (float) CalculatePort.GetCalculatedValue(timePort);
+      var minValue = 0f;
+      var maxValue = 1f;
       float targetValue;
-      if (targetValuePort.connected) {
-        targetValue = (float) CalculatePort.GetCalculatedValue(targetValuePort);
-      } else return default;
+      if (minValuePort.connected) {
+        minValue = (float) CalculatePort.GetCalculatedValue(minValuePort);
+      }
+      if (maxValuePort.connected) {
+        maxValue = (float) CalculatePort.GetCalculatedValue(maxValuePort);
+      }
       AnimationCurve curve;
       if (curvePort.connected) {
         curve = (AnimationCurve) CalculatePort.GetCalculatedValue(curvePort);
@@ -92,17 +117,19 @@ public class PropertyTransitionNode : Node, IGraphNode {
         curve = curveField.value;
       }
       return p => {
-        p.constructor.Add(property, targetValue, curve);
+        p.constructor.AddImmediate(property, minValue);
+        p.constructor.Add(property, maxValue, curve);
+        p.constructor.Next(time);
         return p;
       };
     });
   }
   
-  public PropertyTransitionNode() {
+  public PropertyCurveChangeNode() {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
-    this.Construct(new SerializablePropertyTransitionNode());
+    this.Construct(new SerializablePropertyCurveChangeNode());
   }
-  public PropertyTransitionNode(AnimationGraphView graphView, SerializablePropertyTransitionNode serializable) {
+  public PropertyCurveChangeNode(AnimationGraphView graphView, SerializablePropertyCurveChangeNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

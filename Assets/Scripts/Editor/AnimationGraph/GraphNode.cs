@@ -35,7 +35,7 @@ public class GraphNodeLogic : IGraphNodeLogic {
   public Dictionary<string, Port> guidPorts { get; }= new Dictionary<string, Port>();
   public Action<GraphAsset> SaveAsset { get; private set; }
   public Func<Port, Port, bool> isCompatible { get; set; }
-    = (input, output) => input.portType == output.portType;
+    = (input, output) => input.portType == output.portType || true;
   void Construct(Node node) {
     this.node = node;
     this.node.RegisterCallback((DetachFromPanelEvent evt) => {

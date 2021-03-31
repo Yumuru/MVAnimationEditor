@@ -11,41 +11,28 @@ using UnityEditor.Experimental.GraphView;
 namespace AnimationGraph {
 using static UnityUtil;
 [Serializable]
-public class SerializablePropertyNode {
+public class SerializableChildrenNode {
   public SerializableGraphNode graphNode;
   public string gameObjectPortGuid;
-  public string typeName;
-  public string propertyName;
   public string outputNodeGuid;
-  public SerializablePropertyNode() {
+  public SerializableChildrenNode() {
     gameObjectPortGuid = Guid.NewGuid().ToString();
     outputNodeGuid = Guid.NewGuid().ToString();
   }
-  public SerializablePropertyNode(PropertyNode node) {
+  public SerializableChildrenNode(ChildrenNode node) {
     this.graphNode = new SerializableGraphNode(node.graphNode);
-    this.typeName = node.typeNameField.value;
-    this.propertyName = node.propertyNameField.value;
     this.gameObjectPortGuid = node.gameObjectPortGuid;
     this.outputNodeGuid = node.outputPortGuid;
   }
 }
 
-public struct PropertyData {
-  public GameObject gameObject;
-  public string gameObjectHierarchyPath;
-  public Type type;
-  public string propertyName;
-}
-
-public class PropertyNode : Node, IGraphNode {
+public class ChildrenNode : Node, IGraphNode {
   public IGraphNodeLogic graphNode { get; private set; }
-  public TextField typeNameField { get; private set; }
-  public TextField propertyNameField { get; private set; }
   public string gameObjectPortGuid;
   public string outputPortGuid;
 
   void SaveAsset(GraphAsset asset) {
-    asset.propertyNodes.Add(new SerializablePropertyNode(this));
+    asset.childrenNodes.Add(new SerializableChildrenNode(this));
   }
 
   Type GetType(string typeName) {
@@ -57,46 +44,35 @@ public class PropertyNode : Node, IGraphNode {
     return null;
   }
 
-  void Construct(SerializablePropertyNode serializable) {
-    this.title = "Property";
+  void Construct(SerializableChildrenNode serializable) {
+    this.title = "Get Children";
 
     this.gameObjectPortGuid = serializable.gameObjectPortGuid;
     var gameObjectPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(GameObject));
     this.graphNode.RegisterPort(gameObjectPort, gameObjectPortGuid);
     this.inputContainer.Add(gameObjectPort);
 
-    this.typeNameField = new TextField();
-    this.typeNameField.label = "Type Name";
-    this.typeNameField.value = serializable.typeName;
-
-    this.propertyNameField = new TextField();
-    this.propertyNameField.label = "Property Name";
-    this.propertyNameField.value = serializable.propertyName;
-
     this.outputPortGuid = serializable.outputNodeGuid;
-    var outputPort = CalculatePort.CreateOutput<PropertyData>();
+    var outputPort = CalculatePort.CreateOutput<List<GameObject>>();
+    outputPort.portName = "List<GameObject>";
     this.graphNode.RegisterPort(outputPort, outputPortGuid);
     this.outputContainer.Add(outputPort);
 
-    outputPort.source = new PortObject<PropertyData>(() => {
+    outputPort.source = new PortObject<List<object>>(() => {
       var gameObject = CalculatePort.GetCalculatedValue(gameObjectPort) as GameObject;
-      return new PropertyData() {
-        gameObject = gameObject,
-        gameObjectHierarchyPath = GetHeirarchyPath(gameObject.transform),
-        type = GetType(typeNameField.value),
-        propertyName = propertyNameField.value
-      };
+      return gameObject.GetComponentsInChildren<Transform>()
+        .Where(t => t != gameObject.transform)
+        .Select(t => t.gameObject)
+        .Cast<object>()
+        .ToList();
     });
-
-    this.mainContainer.Add(typeNameField);
-    this.mainContainer.Add(propertyNameField);
   }
   
-  public PropertyNode() {
+  public ChildrenNode() {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
-    this.Construct(new SerializablePropertyNode());
+    this.Construct(new SerializableChildrenNode());
   }
-  public PropertyNode(AnimationGraphView graphView, SerializablePropertyNode serializable) {
+  public ChildrenNode(AnimationGraphView graphView, SerializableChildrenNode serializable) {
     this.graphNode = new GraphNodeLogic(this, graphView, SaveAsset);
     serializable.graphNode.Load(graphNode as GraphNodeLogic);
     this.Construct(serializable);

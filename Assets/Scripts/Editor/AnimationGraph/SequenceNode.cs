@@ -7,10 +7,10 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
-public class SequenceActionParameter : IPortObject<Proceed> {
+public class SequenceActionParameter : IPortObject {
   public bool canUseProcessOutput;
-  public Func<Proceed> getter { get; private set; }
-  public SequenceActionParameter(bool canUseProcessOutput, Func<Proceed> getter) {
+  public Func<object> getter { get; private set; }
+  public SequenceActionParameter(bool canUseProcessOutput, Func<Process> getter) {
     this.canUseProcessOutput = canUseProcessOutput;
     this.getter = getter;
   }
@@ -60,11 +60,11 @@ public class SequenceNode : Node, IGraphNode {
     public Field(SequenceNode node, SerializableSequenceNode.Field serializable) {
       this.style.flexDirection = FlexDirection.Row;
 
-      actionPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(Proceed));
+      actionPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(Process));
       this.actionPortGuid = serializable.actionPortGuid;
       node.graphNode.RegisterPort(actionPort, actionPortGuid);
 
-      outputPort = ProcessPort.CreateOutput();
+      outputPort = EventPort.CreateOutput();
       this.outputPortGuid = serializable.outputPortGuid;
       node.graphNode.RegisterPort(outputPort, outputPortGuid);
 
@@ -84,9 +84,9 @@ public class SequenceNode : Node, IGraphNode {
     }
 
     public ProcessParameter Proceed(ProcessParameter p) {
-      var action = CalculatePort.GetCalculatedValue<Proceed>(actionPort);
+      var action = CalculatePort.GetCalculatedValue(actionPort) as Process;
       if (action != null) p = action(p);
-      ProcessPort.Proceed(p, outputPort);
+      EventPort.Proceed(p, outputPort);
       return p;
     }
   }
@@ -122,7 +122,7 @@ public class SequenceNode : Node, IGraphNode {
   void Construct(SerializableSequenceNode serializable) {
     this.title = "Sequence";
     this.outputContainer.RemoveFromHierarchy();
-    var inputPort = ProcessPort.CreateInput();
+    var inputPort = EventPort.CreateInput();
     this.inputPortGuid = serializable.inputPortGuid;
     graphNode.RegisterPort(inputPort, serializable.inputPortGuid);
     this.inputContainer.Add(inputPort);
@@ -140,7 +140,7 @@ public class SequenceNode : Node, IGraphNode {
 
     this.mainContainer.Add(addFieldButton);
 
-    inputPort.SetProceed(p => {
+    inputPort.NewEvent(p => {
       return fields.Proceed(p);
     });
   }

@@ -10,9 +10,9 @@ public static class CalculatePort {
   public static Port CreateOutput<T>() {
     return Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(T));
   }
-  public static T GetCalculatedValue<T>(Port calculatePort) {
+  public static object GetCalculatedValue(Port calculatePort) {
     if (!calculatePort.connected) return default;
-    var portObject = calculatePort.connections.First().output.source as IPortObject<T>;
+    var portObject = calculatePort.connections.First().output.source as IPortObject;
     return portObject.getter();
   }
 }
