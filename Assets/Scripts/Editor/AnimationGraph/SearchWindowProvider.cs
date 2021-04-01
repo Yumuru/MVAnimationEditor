@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -6,6 +7,7 @@ using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
+public class HideSearchTreeAttribute : Attribute { }
 public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
   private AnimationGraphWindow window;
   private AnimationGraphView graphView;
@@ -24,7 +26,8 @@ public class SearchWindowProvider : ScriptableObject, ISearchWindowProvider {
         var checkSubclass =
           type.IsSubclassOf(typeof(Node)) ||
           type.IsSubclassOf(typeof(GraphElement));
-        if (type.IsClass && type.Namespace == "AnimationGraph" && !type.IsAbstract && checkSubclass) {
+        var hide = type.GetCustomAttributes(typeof(HideSearchTreeAttribute), false).Any();
+        if (type.IsClass && type.Namespace == "AnimationGraph" && !type.IsAbstract && checkSubclass && !hide) {
           entries.Add(new SearchTreeEntry(new GUIContent(type.Name)) { level = 1, userData = type });
         }
       }

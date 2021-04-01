@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe5e6e1d8cb540498e9ed516f853cf8, type: 3}
   m_Name: New Graph Asset
   m_EditorClassIdentifier: 
-  viewPosition: {x: 593, y: 339, z: 0}
+  viewPosition: {x: 278, y: 190, z: 0}
   viewScale: {x: 1, y: 1, z: 1}
   animationGenerateNodes:
   - graphNode:
       position:
         serializedVersion: 2
-        x: -417
-        y: 54
+        x: -16
+        y: 79
         width: 282
         height: 140
     outputPortGuid: a0b29261-c6ec-4829-a630-0b2824d75519
@@ -70,13 +70,11 @@ MonoBehaviour:
         x: 1575
         y: 244
         width: 172
-        height: 148
+        height: 124
     inputPortGuid: 438714de-f549-4007-9e33-5aff9a85e9d6
     fields:
     - actionPortGuid: 44e99985-882c-4a7e-8218-c73e5a80000c
       outputPortGuid: d7c343f2-1047-4ef6-b7fd-e1d68b68a0e8
-    - actionPortGuid: f7220da4-518f-46f5-b2e0-4fc8e6e39c3e
-      outputPortGuid: 100d06cf-8ca4-440b-97a4-e9d05ebd9430
   forloopNodes:
   - graphNode:
       position:
@@ -165,8 +163,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 791
         y: 205
-        width: 186
-        height: 65
+        width: 187
+        height: 64
     value: 10
     outputPortGuid: 626b03e4-6f78-4adf-a141-73b3fef71d9a
   floatListNodes: []
@@ -213,7 +211,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 763
         y: 485
-        width: 163
+        width: 162
         height: 101
     outputPortGuid: 571dc406-5b84-434e-8c26-334f7e2f933c
     calculateField:
@@ -251,8 +249,7 @@ MonoBehaviour:
     inputPortGuid: c6ac6f2f-9e99-4fc0-93e1-a76d5cfb1e25
   - outputPortGuid: 571dc406-5b84-434e-8c26-334f7e2f933c
     inputPortGuid: 1af96d8f-cc91-48fa-a709-08e9f38e299c
-  - outputPortGuid: a4483a4b-8a5b-4194-8880-f38cbdf3eace
-    inputPortGuid: f7220da4-518f-46f5-b2e0-4fc8e6e39c3e
   - outputPortGuid: a0b29261-c6ec-4829-a630-0b2824d75519
     inputPortGuid: 152b604b-ed2f-4a4e-8a45-fd197be1e21d
-  gameObject: {fileID: 0}
+  - outputPortGuid: a4483a4b-8a5b-4194-8880-f38cbdf3eace
+    inputPortGuid: 44e99985-882c-4a7e-8218-c73e5a80000c

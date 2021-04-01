@@ -19,6 +19,14 @@ public static class UnityUtil {
     return builder.ToString();
   }
 
+  public static float CastFloat(this object value) {
+    if (value is float) {
+      return (float)value;
+    } if (value is int) {
+      return (float)(int)value;
+    }
+    return default;
+  }
   public static int CastInt(this object value) {
     if (value is float) {
       return (int)(float)value;

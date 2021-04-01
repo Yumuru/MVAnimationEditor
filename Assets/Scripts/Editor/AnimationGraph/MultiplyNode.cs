@@ -39,7 +39,7 @@ public class MultiplyNode : Node, IGraphNode {
       var value = 1f;
       foreach (var field in calculateField.fields) {
         if (field.inputPort.connected) {
-          value *= CalculatePort.GetCalculatedValue(field.inputPort).CastInt();
+          value *= CalculatePort.GetCalculatedValue(field.inputPort).CastFloat();
         } else {
           value *= field.valueField.value;
         }

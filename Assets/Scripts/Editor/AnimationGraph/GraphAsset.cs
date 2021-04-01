@@ -60,11 +60,9 @@ public class GraphAsset : ScriptableObject {
   public List<SerializableCurveNode> curveNodes = new List<SerializableCurveNode>();
   public List<SerializableMultiplyNode> multiplyNodes = new List<SerializableMultiplyNode>();
   public List<SerializableEdge> edges = new List<SerializableEdge>();
-  public GameObject gameObject;
   public void SaveAsset(AnimationGraphView graphView) {
     viewPosition = graphView.viewTransform.position;
     viewScale = graphView.viewTransform.scale;
-    gameObject = new GameObject();
 
     animationGenerateNodes.Clear();
     gameObjectFieldNodes.Clear();
