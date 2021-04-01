@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a45200a5db9069946a15c09bb6ddc0be, type: 3}
+  m_Name: New Example Graph
+  m_EditorClassIdentifier: 
+  serializedNodes:
+  - type: ResultNode, Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    jsonDatas: '{"GUID":"d3fda61d-b06b-47f4-b0f6-3069fecf16ca","computeOrder":0,"position":{"serializedVersion":"2","x":832.9600219726563,"y":170.1999969482422,"width":83.0,"height":77.0},"expanded":false,"debug":false,"nodeLock":false,"input":0.0}'
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  stickyNotes: []
+  position: {x: 9, y: 22, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  references:
+    version: 1
