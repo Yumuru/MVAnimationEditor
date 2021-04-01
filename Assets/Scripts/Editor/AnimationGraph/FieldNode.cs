@@ -25,9 +25,17 @@ public abstract class FieldNode<T> : Node, IGraphNode {
 
   protected abstract void SaveAsset(GraphAsset asset);
 
-  void Construct(SerializableFieldNode<T> serializable) {
+  void Construct(SerializableFieldNode<T> serializable, Port inputPort) {
+    this.capabilities -= Capabilities.Movable;
+
     this.titleContainer.RemoveFromHierarchy();
     this.inputContainer.RemoveFromHierarchy();
+
+    inputPort.node.RegisterCallback<GeometryChangedEvent>(evt => {
+      var rightPos = inputPort.ChangeCoordinatesTo(inputPort.node.parent, inputPort.GetPosition()).position;
+      var pos = new Vector2(rightPos.x - this.resolvedStyle.width, rightPos.y - this.resolvedStyle.height / 2f);
+      this.SetPosition(new Rect(pos, Vector2.one));
+    });
 
     var outputPort = CalculatePort.CreateOutput<float>();
     this.outputPortGuid = serializable.outputPortGuid;
@@ -41,7 +49,7 @@ public abstract class FieldNode<T> : Node, IGraphNode {
   public FieldNode(AnimationGraphView graphView, Port inputPort, SerializableFieldNode<T> serializable) {
     this.graphNode = new GraphNodeLogic(this, SaveAsset);
     serializable.graphNode.Load(this.graphNode as GraphNodeLogic);
-    this.Construct(new SerializableFieldNode<T>());
+    this.Construct(new SerializableFieldNode<T>(), inputPort);
   }
 }
 }

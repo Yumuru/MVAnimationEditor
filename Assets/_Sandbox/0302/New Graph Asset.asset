@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe5e6e1d8cb540498e9ed516f853cf8, type: 3}
   m_Name: New Graph Asset
   m_EditorClassIdentifier: 
-  viewPosition: {x: 278, y: 190, z: 0}
+  viewPosition: {x: 278, y: 250, z: 0}
   viewScale: {x: 1, y: 1, z: 1}
   animationGenerateNodes:
   - graphNode:
@@ -20,7 +20,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: -16
         y: 79
-        width: 282
+        width: 287
         height: 140
     outputPortGuid: a0b29261-c6ec-4829-a630-0b2824d75519
     clip: {fileID: 7400000, guid: f6e189f487729dc41a4a9b78e7e6d520, type: 2}
@@ -33,7 +33,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: -195
         y: 342
-        width: 227
+        width: 228
         height: 97
     gameObject:
       assetPath: Assets/_Sandbox/0302/New Scene.unity
@@ -45,7 +45,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 722
         y: 339
-        width: 270
+        width: 277
         height: 117
     gameObjectPortGuid: 5e99e3c4-ee5f-4d13-9cbd-15ced1b1fb3a
     typeName: Transform
@@ -58,7 +58,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1147
         y: 31
-        width: 172
+        width: 178
         height: 124
     inputPortGuid: 6af449dd-50ea-4577-a504-d410c320402a
     fields:
@@ -69,7 +69,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1575
         y: 244
-        width: 172
+        width: 178
         height: 124
     inputPortGuid: 438714de-f549-4007-9e33-5aff9a85e9d6
     fields:
@@ -94,7 +94,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 919
         y: 14
-        width: 147
+        width: 152
         height: 100
     timePortGuid: 6e23eb7c-c1ea-4e21-88a3-327772860204
     instanceActionPortGuids: []
@@ -106,7 +106,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 1114
         y: 397
-        width: 233
+        width: 237
         height: 173
     propretyPortGuid: 525032d4-517b-4cba-8290-f4036e4c697f
     timePortGuid: e81feff7-2edf-466b-a9ad-ac7aeb443a62
@@ -147,7 +147,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  testNodes: []
+  testNodes:
+  - graphNode:
+      position:
+        serializedVersion: 2
+        x: 552
+        y: -91
+        width: 314
+        height: 97
+    inputPortGuid: 6427d385-dc15-4794-b06b-9ffa1763d4fe
   floatValueNodes:
   - graphNode:
       position:
@@ -163,8 +171,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 791
         y: 205
-        width: 187
-        height: 64
+        width: 186
+        height: 65
     value: 10
     outputPortGuid: 626b03e4-6f78-4adf-a141-73b3fef71d9a
   floatListNodes: []
@@ -175,7 +183,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 359
         y: 381
-        width: 180
+        width: 184
         height: 101
     inputPortGuid: 4148d806-cd81-479b-978f-5f726d1124cc
     indexPortGuid: d8496a05-fdd1-45a1-b291-e339efb74616
@@ -186,7 +194,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 109
         y: 334
-        width: 240
+        width: 252
         height: 77
     gameObjectPortGuid: f7d312b0-4171-4c82-af50-37b3e34b57e0
     outputNodeGuid: e875f8e9-847f-4192-ac2a-44ad82d119dc
@@ -197,7 +205,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 774
         y: 604
-        width: 163
+        width: 170
         height: 101
     outputPortGuid: 38041e67-c937-4fce-b111-55066af942cb
     calculateField:
@@ -211,7 +219,7 @@ MonoBehaviour:
         serializedVersion: 2
         x: 763
         y: 485
-        width: 162
+        width: 170
         height: 101
     outputPortGuid: 571dc406-5b84-434e-8c26-334f7e2f933c
     calculateField:

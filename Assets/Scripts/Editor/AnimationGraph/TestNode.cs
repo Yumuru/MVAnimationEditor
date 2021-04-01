@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
 
@@ -36,6 +37,15 @@ public class TestNode : Node, IGraphNode {
 
     label = new Label();
     this.mainContainer.Add(label);
+
+    var count = 0;
+    this.RegisterCallback<GeometryChangedEvent>(evt =>{
+      label.text = (++count).ToString() + "\n";
+      label.text += this.GetPosition().ToString() + "\n";
+      label.text += inputPort.ChangeCoordinatesTo(this.parent, inputPort.GetPosition());
+    });
+
+    this.mainContainer.Add(new TextField());
 
     inputPort.NewEvent(p => {
       Debug.Log(p.time);

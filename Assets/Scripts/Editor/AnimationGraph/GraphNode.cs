@@ -20,6 +20,7 @@ public interface IGraphNode {
 }
 public interface IGraphNodeLogic {
   Node node { get; }
+  AnimationGraphView graphView { get; }
   Dictionary<Port, string> portGuids { get; }
   Dictionary<string, Port> guidPorts { get; }
   Func<Port, Port, bool> isCompatible { get; set; }

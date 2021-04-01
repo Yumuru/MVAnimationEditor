@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditor.Experimental.GraphView;
 
 namespace AnimationGraph {
